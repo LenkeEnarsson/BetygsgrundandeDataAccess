@@ -1,9 +1,12 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="_scripts/database-rebuild-all.ps1" />
+  </Folder>
+  <Project Path="AppWebApi/AppWebApi.csproj" />
   <Project Path="Configuration/Configuration.csproj" />
   <Project Path="DbContext/DbContext.csproj" />
   <Project Path="DbModels/DbModels.csproj" />
   <Project Path="DbRepos/DbRepos.csproj" />
-  <Project Path="Services/Services.csproj" />
-  <Project Path="AppWebApi/AppWebApi.csproj" />
   <Project Path="Models/Models.csproj" />
+  <Project Path="Services/Services.csproj" />
 </Solution>

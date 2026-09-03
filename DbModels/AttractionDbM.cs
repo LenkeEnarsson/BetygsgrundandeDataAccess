@@ -10,6 +10,13 @@ namespace DbModels;
 public class AttractionDbM : Attraction, ISeed<AttractionDbM>
 {
     [Key] public override Guid AttractionId { get; set; }
+    [NotMapped] public override ICity City { get => CityDbM; set => throw new NotImplementedException(); } 
+    public CityDbM CityDbM { get; set; }
+    [NotMapped] public override List<IReview> Reviews { get => ReviewsDbM?.ToList<IReview>(); set => throw new NotImplementedException(); } 
+    public List<ReviewDbM> ReviewsDbM {get;set;}
+    [NotMapped] public override List<ICategory> Categories{ get => CategoriesDbM?.ToList<ICategory>(); set => throw new NotImplementedException(); } 
+    public List<CategoryDbM> CategoriesDbM { get; set; }
+
 
     public new AttractionDbM Seed(SeedGenerator seeder)
     {

@@ -16,18 +16,59 @@ public class AdminDbRepos
     private Encryptions _encryptions;
     private readonly MainDbContext _dbContext;
 
-    public async Task SeedAsync(int nrItems)
+    public async Task SeedAsync()
     {
         //Create a seeder
         var fn = Path.GetFullPath(_seedSource);
         var seeder = new SeedGenerator(fn);
+        //Create a random
+        var rnd = new Random();
 
-        //remove existing attractions in the database
+        //remove existing items in the database
         _dbContext.Attractions.RemoveRange(_dbContext.Attractions);
+        _dbContext.Categories.RemoveRange(_dbContext.Categories);
+        _dbContext.Cities.RemoveRange(_dbContext.Cities);
+        _dbContext.Countries.RemoveRange(_dbContext.Countries);
+        _dbContext.Reviews.RemoveRange(_dbContext.Reviews);
+        _dbContext.Users.RemoveRange(_dbContext.Users);
 
-        //Seeding new attractions into the database
-        var attractions = seeder.ItemsToList<AttractionDbM>(nrItems);
+
+        //Seeding lists 
+        var categories = seeder.ItemsToList<CategoryDbM>(50);
+        var countries = seeder.ItemsToList<CountryDbM>(15);
+        var cities = seeder.ItemsToList<CityDbM>(150);
+        var attractions = seeder.ItemsToList<AttractionDbM>(1500);
+        var users = seeder.ItemsToList<UserDbM>(100);
+        var reviews = seeder.ItemsToList<ReviewDbM>(3000);
+
+        //Add foreign key relations
+        foreach (var c in cities)
+            c.CountryDbM = countries[rnd.Next(countries.Count)];
+
+        foreach (var a in attractions)
+        {
+            a.CityDbM = cities[rnd.Next(cities.Count)];
+            a.CategoriesDbM = categories
+                            .Select(c => new { Category = c, Order = rnd.Next() })
+                            .OrderBy(x => x.Order)
+                            .Take(rnd.Next(1,4))
+                            .Select(x => x.Category)
+                            .ToList();
+        }
+
+        foreach (var r in reviews)
+        {
+            r.AttractionDbM = attractions[rnd.Next(attractions.Count)];
+            r.UserDbM = users[rnd.Next(users.Count)];
+        }
+
+        //Add to database
+        _dbContext.Categories.AddRange(categories);
+        _dbContext.Countries.AddRange(countries);
+        _dbContext.Cities.AddRange(cities);
         _dbContext.Attractions.AddRange(attractions);
+        _dbContext.Users.AddRange(users);
+        _dbContext.Reviews.AddRange(reviews);
 
         //Save changes to the database
         await _dbContext.SaveChangesAsync();

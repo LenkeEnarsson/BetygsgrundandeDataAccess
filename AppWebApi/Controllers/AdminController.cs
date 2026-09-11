@@ -62,7 +62,7 @@ namespace AppWebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        //GET: api/admin/seed?count={count}
+        //GET: api/admin/seed
         [HttpGet()]
         [ActionName("Seed")]
         [ProducesResponseType(200, Type = typeof(string))]
@@ -75,6 +75,27 @@ namespace AppWebApi.Controllers
                 await _service.SeedAsync();
 
                 return Ok($"Seeded items successfully");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{nameof(Seed)}: {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //GET: api/admin/removeseed
+        [HttpGet()]
+        [ActionName("RemoveSeed")]
+        [ProducesResponseType(200, Type = typeof(string))]
+        [ProducesResponseType(400, Type = typeof(string))]
+        public async Task<IActionResult> RemoveSeed()
+        {
+            try
+            {
+                _logger.LogInformation($"{nameof(Seed)}");
+                await _service.RemoveSeedAsync(true);
+
+                return Ok($"Seeded items removed successfully");
             }
             catch (Exception ex)
             {

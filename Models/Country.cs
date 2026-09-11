@@ -5,12 +5,27 @@ using System.Text;
 
 namespace Models
 {
-    public class Country : ICountry, ISeed<Country>
+    public class Country : ICountry, IEquatable<Country>, ISeed<Country>
     {
         public virtual Guid CountryId { get; set; }
         public string Name { get; set; }
 
         public virtual List<ICity> Cities { get; set; } = [];
+
+        #region Constructors & Equals
+        public Country() { }
+        public Country(Country org) //Deepcopy
+        {
+            CountryId = org.CountryId;
+            Name = org.Name;
+
+            foreach (var c in org.Cities)
+                Cities.Add(c);
+
+            Seeded = org.Seeded;
+        }
+        public bool Equals(Country other) => this.Name == other.Name;
+        #endregion
 
         #region Seeding
         public bool Seeded { get; set; }
@@ -19,13 +34,6 @@ namespace Models
             Seeded = true;
             CountryId = Guid.NewGuid();
             Name = seeder.Country;
-            
-            Cities = seeder.ItemsToList<City>(seeder.Next(1, 55)).ToList<ICity>();
-            foreach (var ci in Cities)
-            {
-                ci.Name = seeder.City(this.Name);
-                ci.Country = this;
-            }
 
             return this;
         }

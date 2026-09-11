@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Models
 {
-    public class Category : ICategory, ISeed<Category>
+    public class Category : ICategory, IEquatable<Category>, ISeed<Category>
     {
         public virtual Guid CategoryId { get; set; }
         public string Name { get; set; }
@@ -13,10 +13,28 @@ namespace Models
         public virtual List<IAttraction> Attractions { get; set; } = [];
 
 
+        #region Constructors & Equals
+        public Category() { }
+        public Category(Category org) //Deepcopy
+        {
+            CategoryId = org.CategoryId;
+            Name = org.Name;
+
+            foreach (var a in org.Attractions)
+                Attractions.Add(a);
+
+            Seeded = org.Seeded;
+        }
+
+        public bool Equals(Category other)
+        {
+            return this.Name.ToLower() == other.Name.ToLower();
+        }
+        #endregion
 
         #region Seeding
         public bool Seeded { get; set; }
-        public Category Seed(SeedGenerator seeder) //called by Attractions.cs, Attractions set by caller.
+        public Category Seed(SeedGenerator seeder)
         {
             Seeded = true;
             CategoryId = Guid.NewGuid();

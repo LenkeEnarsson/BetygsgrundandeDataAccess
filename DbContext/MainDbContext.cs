@@ -43,9 +43,6 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
     //Here we can modify the migration building
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        #region override modelbuilder
-        #endregion
-        
         base.OnModelCreating(modelBuilder);
     }
 

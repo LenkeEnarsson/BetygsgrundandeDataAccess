@@ -1,4 +1,5 @@
 using Seido.Utilities.SeedGenerator;
+using System.Net.Mail;
 
 namespace Models;
 
@@ -7,24 +8,36 @@ public class Attraction : IAttraction, ISeed<Attraction>
     public virtual Guid AttractionId { get; set; }
     public virtual ICity City { get; set; }
     public string Name { get; set; }
+    public string Description { get; set; }
 
     public virtual List<ICategory> Categories { get; set; } = [];
     public virtual List<IReview> Reviews { get; set; } = [];
 
+    #region Constructors
+    public Attraction() { }
+    public Attraction(Attraction org) 
+    {
+        AttractionId = org.AttractionId;
+        City = org.City;
+        Name = org.Name;
+        Description = org.Description;
+
+        foreach (var c in org.Categories)
+            Categories.Add(c);
+        foreach (var r in org.Reviews)
+            Reviews.Add(r);
+        
+        Seeded = org.Seeded;
+    }
+    #endregion
 
     #region Seeding
     public bool Seeded {get;set;}
-    public Attraction Seed (SeedGenerator seeder) //called by City.cs, City set by caller.
+    public Attraction Seed (SeedGenerator seeder)
     {
         Seeded = true;
         AttractionId = Guid.NewGuid();
         Name = seeder.MusicAlbumName;
-
-        Categories = seeder.ItemsToList<Category>(seeder.Next(1, 4)).ToList<ICategory>();
-        foreach (var c in Categories)
-            c.Attractions.Add(this);
-
-        //Reviews set by User.cs
 
         return this;
     }

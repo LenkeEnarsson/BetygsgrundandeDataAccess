@@ -21,17 +21,8 @@ public class AdminDbRepos
         //Create a seeder
         var fn = Path.GetFullPath(_seedSource);
         var seeder = new SeedGenerator(fn);
-        //Create a random
+        
         var rnd = new Random();
-
-        //remove existing items in the database
-        _dbContext.Attractions.RemoveRange(_dbContext.Attractions);
-        _dbContext.Categories.RemoveRange(_dbContext.Categories);
-        _dbContext.Cities.RemoveRange(_dbContext.Cities);
-        _dbContext.Countries.RemoveRange(_dbContext.Countries);
-        _dbContext.Reviews.RemoveRange(_dbContext.Reviews);
-        _dbContext.Users.RemoveRange(_dbContext.Users);
-
 
         //Seeding lists 
         var categories = seeder.ItemsToList<CategoryDbM>(50);
@@ -43,7 +34,7 @@ public class AdminDbRepos
 
         //Add foreign key relations
         foreach (var c in cities)
-            c.CountryDbM = countries[rnd.Next(countries.Count)];
+            c.CountryDbM = countries[rnd.Next(countries. Count)];
 
         foreach (var a in attractions)
         {
@@ -72,6 +63,19 @@ public class AdminDbRepos
 
         //Save changes to the database
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task RemoveSeedAsync(bool seeded)
+    {
+        //remove existing items in the database
+        _dbContext.Attractions.RemoveRange(_dbContext.Attractions.Where(i => i.Seeded == true));
+        _dbContext.Categories.RemoveRange(_dbContext.Categories.Where(i => i.Seeded == true));
+        _dbContext.Cities.RemoveRange(_dbContext.Cities.Where(i => i.Seeded == true));
+        _dbContext.Countries.RemoveRange(_dbContext.Countries.Where(i => i.Seeded == true));
+        _dbContext.Reviews.RemoveRange(_dbContext.Reviews.Where(i => i.Seeded == true));
+        _dbContext.Users.RemoveRange(_dbContext.Users.Where(i => i.Seeded == true));
+
+        _dbContext.SaveChanges();
     }
 
     public AdminDbRepos(ILogger<AdminDbRepos> logger, Encryptions encryptions, MainDbContext context)

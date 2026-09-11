@@ -2,7 +2,7 @@ using Seido.Utilities.SeedGenerator;
 
 namespace Models;
 
-public class Review : IReview, ISeed<Review>
+public class Review : IReview, IEquatable<Review>, ISeed<Review>
 {
     public virtual Guid ReviewId { get; set; }
     public virtual IAttraction Attraction { get; set; }
@@ -11,10 +11,25 @@ public class Review : IReview, ISeed<Review>
     public virtual IUser Author { get; set; }
     public DateTime DateMade { get; set; }
 
+    #region Constructors & Equals
+    public Review() { }
+    public Review(Review org) //Deepcopy
+    {
+        ReviewId = org.ReviewId;
+        Attraction = org.Attraction;
+        Comment = org.Comment;
+        Score = org.Score;
+        Author = org.Author;
+        DateMade = org.DateMade;
+
+        Seeded = org.Seeded;
+    }
+    public bool Equals(Review other) => (this.Attraction, this.Comment, this.Score, this.Author) == (other.Attraction, other.Comment, other.Score, other.Author);
+    #endregion
 
     #region Seeding
     public bool Seeded {get;set;}
-    public Review Seed (SeedGenerator seeder) //called by Attractions.cs, Attraction set by caller.
+    public Review Seed (SeedGenerator seeder)
     {
         Seeded = true;
         ReviewId = Guid.NewGuid();

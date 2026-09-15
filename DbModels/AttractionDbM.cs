@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 
 using Seido.Utilities.SeedGenerator;
 using Models;
+using models.Dto;
 
 namespace DbModels;
 
@@ -29,6 +30,18 @@ public class AttractionDbM : Attraction, ISeed<AttractionDbM>
     public new AttractionDbM Seed(SeedGenerator seeder)
     {
         base.Seed(seeder);
+        return this;
+    }
+
+//TODO: Översätt till korrekt modell
+    public AttractionDbM UpdateFromDTO(AttractionCuDto org)
+    {
+        AttractionId = org.AttractionId;
+        FirstName = org.FirstName;
+        LastName = org.LastName;
+        Email = org.Email;
+        Birthday = org.Birthday;
+
         return this;
     }
 }

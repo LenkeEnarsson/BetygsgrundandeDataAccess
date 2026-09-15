@@ -19,7 +19,7 @@ namespace AppWebApi.Controllers
         readonly AesEncryptionOptions _aesOptions;
         readonly JwtOptions _jwtOptions;
         readonly Encryptions _encryptions = null;
-        readonly IAuthService _authorization = null;
+        readonly IAuthService _service = null;
 
         //GET: api/auth/Login
         [HttpGet()]
@@ -30,15 +30,15 @@ namespace AppWebApi.Controllers
             try
             {
                 //TODO: Implementera JWT 
-                var result = _authorization.Login(user);
+                var result = _service.Login(user);
 
                 _logger.LogInformation($"{nameof(Login)}:\n{JsonConvert.SerializeObject(result)}");
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(Login)}: {ex.Message}");
-                return BadRequest(ex.Message);
+                _logger.LogError($"{nameof(Login)}: {ex.Message} - {ex.InnerException?.Message}");
+                return BadRequest($"{ex.Message} - {ex.InnerException?.Message}");
             }
          }
 
@@ -50,15 +50,15 @@ namespace AppWebApi.Controllers
         {
             try
             {
-                var result = _authorization.Login(user);
+                var result = _service.SignUp(user);
                 
                 _logger.LogInformation($"{nameof(SignUp)}:\n{JsonConvert.SerializeObject(result)}");
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(SignUp)}: {ex.Message}");
-                return BadRequest(ex.Message);
+                _logger.LogError($"{nameof(SignUp)}: {ex.Message} - {ex.InnerException?.Message}");
+                return BadRequest($"{ex.Message} - {ex.InnerException?.Message}");
             }
          }
 
@@ -74,7 +74,7 @@ namespace AppWebApi.Controllers
             _jwtOptions = jwtOptions.Value;
 
             _encryptions = encryptions;
-            _authorization = authorization;
+            _service = authorization;
         }
     }
 }

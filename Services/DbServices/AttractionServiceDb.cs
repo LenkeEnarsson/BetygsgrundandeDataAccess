@@ -2,11 +2,14 @@ using Microsoft.Extensions.Logging;
 
 using Models;
 using DbRepos;
+using Models.DTO;
+using models.Dto;
 
 namespace Services;
 
 public class AttractionServiceDb : IAttractionService
 {
+    #region fields & constructors
     private readonly AttractionDbRepos _repo = null;
     private readonly ILogger<AttractionServiceDb> _logger = null;
 
@@ -19,5 +22,17 @@ public class AttractionServiceDb : IAttractionService
     {
         _logger = logger;
     }
+    #endregion
+
+    public Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
+    => _repo.ReadAttractionListAsync(seeded, flat, filter, pageNumber, pageSize);
+    public Task<ResponseItemDto<IAttraction>> ReadAttractionAsync(Guid id, bool flat)
+    => _repo.ReadAttractionAsync(id, flat);
+    public Task<ResponseItemDto<IAttraction>> DeleteAttractionAsync(Guid id)
+    => _repo.DeleteAttractionAsync(id);
+    public Task<ResponseItemDto<IAttraction>> UpdateAttractionAsync(AttractionCuDto item)
+    => _repo.UpdateAttractionAsync(item);
+    public Task<ResponseItemDto<IAttraction>> CreateAttractionAsync(AttractionCuDto item)
+    => _repo.CreateAttractionAsync(item);
 }
 

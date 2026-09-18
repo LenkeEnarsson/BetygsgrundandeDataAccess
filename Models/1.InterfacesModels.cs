@@ -28,7 +28,6 @@ public interface IAttraction
     public List<IReview> Reviews{ get; set; }
 }
 
-public enum ECategory { Hotel, Restaurant, Cafe}
 public interface ICategory
 {
     public Guid CategoryId { get; set; }

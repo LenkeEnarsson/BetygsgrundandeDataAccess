@@ -26,21 +26,35 @@ public class AttractionDbM : Attraction, ISeed<AttractionDbM>
     [JsonIgnore]
     public List<CategoryDbM> CategoriesDbM { get; set; }
 
-
+    public AttractionDbM() {}
     public new AttractionDbM Seed(SeedGenerator seeder)
     {
         base.Seed(seeder);
         return this;
     }
 
-//TODO: Översätt till korrekt modell
+    public AttractionDbM (AttractionCuDto org)
+    {
+        if(org.AttractionId is not null) AttractionId = (Guid)org.AttractionId;
+        else AttractionId = Guid.NewGuid();
+
+        Name = org.Name;
+        Description = org.Description;
+    }
+
+/// <summary>
+/// Fill scalar properties in AttractionDbM from AttractionCuDto. 
+/// Needs navProp_AttractionCUdto_to_AttractionDbM to fill object references.
+/// </summary>
+/// <param name="org"></param>
+/// <returns></returns>
+/// <exception cref="ArgumentException"></exception>
     public AttractionDbM UpdateFromDTO(AttractionCuDto org)
     {
-        AttractionId = org.AttractionId;
-        FirstName = org.FirstName;
-        LastName = org.LastName;
-        Email = org.Email;
-        Birthday = org.Birthday;
+        if(org.AttractionId != this.AttractionId) throw new ArgumentException($"Update object and database object does not have the same id.");
+        
+        Name = org.Name;
+        Description = org.Description;
 
         return this;
     }

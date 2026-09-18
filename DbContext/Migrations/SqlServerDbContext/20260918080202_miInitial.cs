@@ -54,6 +54,9 @@ namespace DbContext.Migrations.SqlServerDbContext
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Username = table.Column<string>(type: "varchar(200)", nullable: true),
+                    Email = table.Column<string>(type: "varchar(200)", nullable: true),
+                    Password = table.Column<string>(type: "varchar(200)", nullable: true),
                     FirstName = table.Column<string>(type: "varchar(200)", nullable: true),
                     LastName = table.Column<string>(type: "varchar(200)", nullable: true),
                     Seeded = table.Column<bool>(type: "bit", nullable: false)

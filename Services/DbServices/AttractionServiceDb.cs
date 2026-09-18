@@ -30,9 +30,9 @@ public class AttractionServiceDb : IAttractionService
     => _repo.ReadAttractionAsync(id, flat);
     public Task<ResponseItemDto<IAttraction>> DeleteAttractionAsync(Guid id)
     => _repo.DeleteAttractionAsync(id);
-    public Task<ResponseItemDto<IAttraction>> UpdateAttractionAsync(AttractionCuDto item)
-    => _repo.UpdateAttractionAsync(item);
     public Task<ResponseItemDto<IAttraction>> CreateAttractionAsync(AttractionCuDto item)
     => _repo.CreateAttractionAsync(item);
+    public Task<ResponseItemDto<IAttraction>> UpdateAttractionAsync(AttractionCuDto item)
+    => _repo.UpdateAttractionAsync(item);
 }
 

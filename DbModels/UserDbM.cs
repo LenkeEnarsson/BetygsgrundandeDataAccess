@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.DTO;
 using Seido.Utilities.SeedGenerator;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,17 @@ namespace DbModels
         [JsonIgnore]
         public List<ReviewDbM> ReviewsDbM { get; set; }
 
+        public UserDbM UpdateFromDto (UserCuDto org)
+        {
+            if(org.UserId is null) UserId = Guid.NewGuid();
+            else throw new NotImplementedException(); //TODO: Uppdatera användare
+            Email = org.Email;
+            Username = org.Username;
+            FirstName = org.FirstName;
+            LastName = org.LastName;
+            Password = org.Password;
+            return this;
+        }
         public new UserDbM Seed(SeedGenerator seeder)
         {
             base.Seed(seeder);

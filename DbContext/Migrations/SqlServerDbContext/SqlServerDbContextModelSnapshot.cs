@@ -157,14 +157,23 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("varchar(200)");
+
                     b.Property<string>("FirstName")
                         .HasColumnType("varchar(200)");
 
                     b.Property<string>("LastName")
                         .HasColumnType("varchar(200)");
 
+                    b.Property<string>("Password")
+                        .HasColumnType("varchar(200)");
+
                     b.Property<bool>("Seeded")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("varchar(200)");
 
                     b.HasKey("UserId");
 

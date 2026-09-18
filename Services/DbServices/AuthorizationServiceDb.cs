@@ -12,11 +12,9 @@ public class AuthorizationServiceDb : IAuthService
     private readonly AuthorizationDbRepos _repo = null;
     private readonly ILogger<AuthorizationServiceDb> _logger = null;
 
-    public Task Login(IUser user) => _repo.Login(user);
-    public Task SignUp(UserSignUpDto user)
-    {
-        throw new NotImplementedException();
-    }
+    public Task Login(UserLoginDto user) => throw new NotImplementedException();
+    public Task SignUp(UserCuDto user) => _repo.SignUp(new UserDbM().UpdateFromDto(user));
+
     
     public AuthorizationServiceDb(AuthorizationDbRepos repo)
     {

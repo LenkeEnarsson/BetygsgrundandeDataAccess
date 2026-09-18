@@ -29,7 +29,7 @@ namespace AppWebApi.Controllers
         {
             try
             {
-                //TODO: Implementera JWT 
+                
                 var result = _service.Login(user);
 
                 _logger.LogInformation($"{nameof(Login)}:\n{JsonConvert.SerializeObject(result)}");
@@ -46,7 +46,7 @@ namespace AppWebApi.Controllers
         [HttpGet()]
         [ActionName(nameof(SignUp))]
         [ProducesResponseType(200, Type = typeof(DatabaseConnections.SetupInformation))]
-        public IActionResult SignUp(UserSignUpDto user)
+        public IActionResult SignUp(UserCuDto user)
         {
             try
             {

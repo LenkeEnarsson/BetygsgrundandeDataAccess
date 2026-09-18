@@ -76,7 +76,12 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //Add your own modelling based on done migrations
+            //Descriptions and reviews are allowed to be 1000 characters
+            modelBuilder.Entity<AttractionDbM>()
+                .Property(a => a.Description).HasColumnType("nvarchar(1000)");
+            modelBuilder.Entity<ReviewDbM>()
+                .Property(a => a.Comment).HasColumnType("nvarchar(1000)");
+
             base.OnModelCreating(modelBuilder);
         }
     }

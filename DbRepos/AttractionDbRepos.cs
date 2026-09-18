@@ -6,6 +6,7 @@ using Models;
 using DbModels;
 using DbContext;
 using Models.DTO;
+using models.Dto;
 
 namespace DbRepos;
 
@@ -53,9 +54,8 @@ public class AttractionDbRepos
         };
     }
 
-public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
+public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool seeded = false, bool flat = true, string filter = "", int pageNumber = 0, int pageSize = 10)
     {
-        filter ??= "";
         IQueryable<AttractionDbM> query;
         if (flat)
         {
@@ -69,35 +69,164 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool see
                 .Include(i => i.CategoriesDbM);
         }
 
-        var ret = new ResponsePageDto<IAttraction>()
+        if (string.IsNullOrEmpty(filter))
+            return new ResponsePageDto<IAttraction>()
+            {
+#if DEBUG
+                ConnectionString = _dbContext.dbConnection,
+#endif
+
+                DbItemsCount = await query
+                //Adding filter functionality
+                .Where(i => (i.Seeded == seeded)).CountAsync(),
+
+                PageItems = await query
+
+                //Adding filter functionality
+                .Where(i => (i.Seeded == seeded))
+
+                //Adding paging
+                .Skip(pageNumber * pageSize)
+                .Take(pageSize)
+
+                .ToListAsync<IAttraction>(),
+
+                PageNr = pageNumber,
+                PageSize = pageSize
+            };
+        else
+            return new ResponsePageDto<IAttraction>()
+            {
+#if DEBUG
+                ConnectionString = _dbContext.dbConnection,
+#endif
+
+                DbItemsCount = await query
+                //Adding filter functionality
+                .Where(i => (i.Seeded == seeded) &&
+                                i.Name.ToLower().Contains(filter)).CountAsync(),
+
+                PageItems = await query
+
+                //Adding filter functionality
+                .Where(i => (i.Seeded == seeded) &&
+                            i.Name.ToLower().Contains(filter))
+
+                //Adding paging
+                .Skip(pageNumber * pageSize)
+                .Take(pageSize)
+
+                .ToListAsync<IAttraction>(),
+
+                PageNr = pageNumber,
+                PageSize = pageSize
+            };
+    }
+
+    public async Task<ResponseItemDto<IAttraction>> DeleteAttractionAsync(Guid id)
+    {
+        //Find the instance with matching id
+        var query1 = _dbContext.Attractions
+            .Where(i => i.AttractionId == id);
+        var item = await query1.FirstOrDefaultAsync<AttractionDbM>();
+
+        //If the item does not exists
+        if (item == null) throw new ArgumentException($"Attraction {id} does not exist.");
+
+        //delete in the database model
+        _dbContext.Attractions.Remove(item);
+
+        //write to database in a UoW
+        await _dbContext.SaveChangesAsync();
+        return new ResponseItemDto<IAttraction>()
         {
 #if DEBUG
             ConnectionString = _dbContext.dbConnection,
 #endif
-            DbItemsCount = await query
-
-            //Adding filter functionality
-            .Where(i => (i.Seeded == seeded) &&
-                        (i.FirstName.ToLower().Contains(filter) ||
-                            i.LastName.ToLower().Contains(filter))).CountAsync(),
-
-            PageItems = await query
-
-            //Adding filter functionality
-            .Where(i => (i.Seeded == seeded) &&
-                        (i.FirstName.ToLower().Contains(filter) ||
-                            i.LastName.ToLower().Contains(filter)))
-
-            //Adding paging
-            .Skip(pageNumber * pageSize)
-            .Take(pageSize)
-
-            .ToListAsync<IFriend>(),
-
-            PageNr = pageNumber,
-            PageSize = pageSize
+            Item = item
         };
-        return ret;
+    }
+
+    public async Task<ResponseItemDto<IAttraction>> CreateAttractionAsync(AttractionCuDto itemCuDto)
+    {
+        if (itemCuDto.AttractionId != null)
+            throw new ArgumentException($"{nameof(itemCuDto.AttractionId)} must be null when creating a new object");
+
+        //transfer any changes from DTO to database objects
+        //Update individual properties Attraction
+        var item = new AttractionDbM(itemCuDto);
+
+        //Update navigation properties
+        await navProp_AttractionCUdto_to_AttractionDbM(itemCuDto, item);
+
+        //Note changes in DbContext and changetracker
+        _dbContext.Attractions.Add(item);
+
+        //write to database in a UoW
+        await _dbContext.SaveChangesAsync();
+
+        //return the updated item in non-flat mode
+        return await ReadAttractionAsync(item.AttractionId, false);
+    }
+    
+    public async Task<ResponseItemDto<IAttraction>> UpdateAttractionAsync(AttractionCuDto itemDto)
+    {
+        if (itemDto.AttractionId != null)
+            throw new ArgumentException($"{nameof(itemDto.AttractionId)} must be null when creating a new object");
+
+        //Update individual properties Attraction
+        var item = new AttractionDbM(itemDto);
+
+        //Update navigation properties
+        await navProp_AttractionCUdto_to_AttractionDbM(itemDto, item);
+
+        //Note changes in DbContext
+        _dbContext.Attractions.Add(item);
+
+        //write to database
+        await _dbContext.SaveChangesAsync();
+
+        //return the updated database item in non-flat mode
+        return await ReadAttractionAsync(item.AttractionId, false);
+    }
+
+    private async Task navProp_AttractionCUdto_to_AttractionDbM(AttractionCuDto itemDtoSrc, AttractionDbM itemDst)
+    {
+        //Assign City
+        itemDst.CityDbM = (itemDtoSrc.CityId is not null) ? await _dbContext.Cities.FirstOrDefaultAsync(
+            a => (a.CityId == itemDtoSrc.CityId)) : null;
+
+        //Assign list of Reviews
+        List<ReviewDbM> reviews = null;
+        if (itemDtoSrc.ReviewsId is not null)
+        {
+            reviews = new List<ReviewDbM>();
+            foreach (var id in itemDtoSrc.ReviewsId)
+            {
+                var p = await _dbContext.Reviews.FirstOrDefaultAsync(i => i.ReviewId == id);
+                if (p is null)
+                    throw new ArgumentException($"Review id {id} does not exist.");
+
+                reviews.Add(p);
+            }
+        }
+        itemDst.ReviewsDbM = reviews;
+
+        //Assign Categories
+        List<CategoryDbM> categories = null;
+        if (itemDtoSrc.CategoriesId is not null)
+        {
+            categories = new List<CategoryDbM>();
+            foreach (var id in itemDtoSrc.CategoriesId)
+            {
+                var q = await _dbContext.Categories.FirstOrDefaultAsync(i => i.CategoryId == id);
+                if (q == null)
+                    throw new ArgumentException($"Category id {id} does not exist.");
+
+                categories.Add(q);
+            }
+        }
+        itemDst.CategoriesDbM = categories;
     }
 
 }

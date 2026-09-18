@@ -37,7 +37,8 @@ public class Attraction : IAttraction, ISeed<Attraction>
     {
         Seeded = true;
         AttractionId = Guid.NewGuid();
-        Name = seeder.MusicAlbumName;
+        Name = seeder.MusicGroupName;
+        Description = seeder.LatinParagraph;
 
         return this;
     }

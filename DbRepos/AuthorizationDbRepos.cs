@@ -19,7 +19,11 @@ public class AuthorizationDbRepos
         _dbContext = context;
     }
 
-        public async Task Login(UserDbM user)
+    public async Task Login(UserDbM user)
+    {
+        throw new NotImplementedException();
+    }
+    public async Task SignUp(UserDbM user)
     {
         throw new NotImplementedException();
     }

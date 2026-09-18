@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Models;
 using DbRepos;
 using Models.DTO;
-using models.Dto;
+using models.CuDto;
 
 namespace Services;
 

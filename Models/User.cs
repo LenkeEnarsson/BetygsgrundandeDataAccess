@@ -14,7 +14,7 @@ namespace Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public virtual List<IReview> Reviews { get; set; } = [];
+        public virtual List<IReview> Reviews { get; set; } = null;
 
         #region Constructors & Equals
         public User() { }

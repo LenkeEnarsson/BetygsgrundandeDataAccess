@@ -19,6 +19,7 @@ namespace DbModels
         [JsonIgnore] 
         public List<CityDbM> CitiesDbM { get; set; }
 
+        
         public new CountryDbM Seed(SeedGenerator seeder)
         {
             base.Seed(seeder);

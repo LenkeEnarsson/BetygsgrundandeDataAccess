@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 using Seido.Utilities.SeedGenerator;
 using Models;
-using models.Dto;
+using models.CuDto;
 
 namespace DbModels;
 
@@ -43,7 +43,7 @@ public class AttractionDbM : Attraction, ISeed<AttractionDbM>
     }
 
 /// <summary>
-/// Fill scalar properties in AttractionDbM from AttractionCuDto. 
+/// Fill individual properties in AttractionDbM from AttractionCuDto. 
 /// Needs navProp_AttractionCUdto_to_AttractionDbM to fill object references.
 /// </summary>
 /// <param name="org"></param>

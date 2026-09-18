@@ -29,4 +29,20 @@ namespace DbModels
         }
     }
 
+    /// <summary>
+/// Fill individual properties in CategoryDbM from CategoryCuDto. 
+/// Needs navProp_CategoryCUdto_to_CategoryDbM to fill object references.
+/// </summary>
+/// <param name="org"></param>
+/// <returns></returns>
+/// <exception cref="ArgumentException"></exception>
+    public CategoryDbM UpdateFromDTO(CategoryCuDto org)
+    {
+        if(org.CategoryId != this.CategoryId) throw new ArgumentException($"Update object and database object does not have the same id.");
+        
+        Name = org.Name;
+
+        return this;
+    }
+
 }

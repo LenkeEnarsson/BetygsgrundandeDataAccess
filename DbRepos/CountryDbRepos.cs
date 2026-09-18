@@ -10,42 +10,40 @@ using models.CuDto;
 
 namespace DbRepos;
 
-public class AttractionDbRepos
+public class CountryDbRepos
 {
     #region fields and constructors
-    private ILogger<AttractionDbRepos> _logger;
+    private ILogger<CountryDbRepos> _logger;
     private readonly MainDbContext _dbContext;
 
-    public AttractionDbRepos(ILogger<AttractionDbRepos> logger, MainDbContext context)
+    public CountryDbRepos(ILogger<CountryDbRepos> logger, MainDbContext context)
     {
         _logger = logger;
         _dbContext = context;
     }
     #endregion
 
-    public async Task<ResponseItemDto<IAttraction>> ReadAttractionAsync(Guid id, bool flat)
+    public async Task<ResponseItemDto<ICountry>> ReadCountryAsync(Guid id, bool flat)
     {
-        IAttraction item;
+        ICountry item;
         if (flat)
         {
-            var query = _dbContext.Attractions.AsNoTracking()
-                .Where(i => i.AttractionId == id);
+            var query = _dbContext.Countries.AsNoTracking()
+                .Where(i => i.CountryId == id);
 
-            item = await query.FirstOrDefaultAsync<IAttraction>();
+            item = await query.FirstOrDefaultAsync<ICountry>();
         }
         else
         {
-            var query = _dbContext.Attractions.AsNoTracking() //No tracking for reading
-                .Include(i => i.CityDbM)
-                .Include(i => i.ReviewsDbM)
-                .Include(i => i.CategoriesDbM)
-                .Where(i => i.AttractionId == id);
+            var query = _dbContext.Countries.AsNoTracking() //No tracking for reading
+                .Include(i => i.CitiesDbM)
+                .Where(i => i.CountryId == id);
 
-            item = await query.FirstOrDefaultAsync<IAttraction>();
+            item = await query.FirstOrDefaultAsync<ICountry>();
         }
         
-        if (item == null) throw new ArgumentException($"Attraction {id} does not exist");
-        return new ResponseItemDto<IAttraction>()
+        if (item == null) throw new ArgumentException($"Country {id} does not exist");
+        return new ResponseItemDto<ICountry>()
         {
 #if DEBUG
             ConnectionString = _dbContext.dbConnection,
@@ -54,23 +52,21 @@ public class AttractionDbRepos
         };
     }
 
-public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool seeded = false, bool flat = true, string filter = "", int pageNumber = 0, int pageSize = 10)
+public async Task<ResponsePageDto<ICountry>> ReadCountryListAsync(bool seeded = false, bool flat = true, string filter = "", int pageNumber = 0, int pageSize = 10)
     {
-        IQueryable<AttractionDbM> query;
+        IQueryable<CountryDbM> query;
         if (flat)
         {
-            query = _dbContext.Attractions.AsNoTracking();
+            query = _dbContext.Countries.AsNoTracking();
         }
         else
         {
-            query = _dbContext.Attractions.AsNoTracking()
-                .Include(i => i.CityDbM)
-                .Include(i => i.ReviewsDbM)
-                .Include(i => i.CategoriesDbM);
+            query = _dbContext.Countries.AsNoTracking()
+                .Include(i => i.CitiesDbM);
         }
 
         if (string.IsNullOrEmpty(filter))
-            return new ResponsePageDto<IAttraction>()
+            return new ResponsePageDto<ICountry>()
             {
 #if DEBUG
                 ConnectionString = _dbContext.dbConnection,
@@ -89,13 +85,13 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool see
                 .Skip(pageNumber * pageSize)
                 .Take(pageSize)
 
-                .ToListAsync<IAttraction>(),
+                .ToListAsync<ICountry>(),
 
                 PageNr = pageNumber,
                 PageSize = pageSize
             };
         else
-            return new ResponsePageDto<IAttraction>()
+            return new ResponsePageDto<ICountry>()
             {
 #if DEBUG
                 ConnectionString = _dbContext.dbConnection,
@@ -116,29 +112,29 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool see
                 .Skip(pageNumber * pageSize)
                 .Take(pageSize)
 
-                .ToListAsync<IAttraction>(),
+                .ToListAsync<ICountry>(),
 
                 PageNr = pageNumber,
                 PageSize = pageSize
             };
     }
 
-    public async Task<ResponseItemDto<IAttraction>> DeleteAttractionAsync(Guid id)
+    public async Task<ResponseItemDto<ICountry>> DeleteCountryAsync(Guid id)
     {
         //Find the instance with matching id
-        var query1 = _dbContext.Attractions
-            .Where(i => i.AttractionId == id);
-        var item = await query1.FirstOrDefaultAsync<AttractionDbM>();
+        var query1 = _dbContext.Countries
+            .Where(i => i.CountryId == id);
+        var item = await query1.FirstOrDefaultAsync<CountryDbM>();
 
         //If the item does not exists
-        if (item == null) throw new ArgumentException($"Attraction {id} does not exist.");
+        if (item == null) throw new ArgumentException($"Country {id} does not exist.");
 
         //delete in the database model
-        _dbContext.Attractions.Remove(item);
+        _dbContext.Countries.Remove(item);
 
         //write to database in a UoW
         await _dbContext.SaveChangesAsync();
-        return new ResponseItemDto<IAttraction>()
+        return new ResponseItemDto<ICountry>()
         {
 #if DEBUG
             ConnectionString = _dbContext.dbConnection,
@@ -147,50 +143,50 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool see
         };
     }
 
-    public async Task<ResponseItemDto<IAttraction>> CreateAttractionAsync(AttractionCuDto itemCuDto)
+    public async Task<ResponseItemDto<ICountry>> CreateCountryAsync(CountryCuDto itemCuDto)
     {
-        if (itemCuDto.AttractionId != null)
-            throw new ArgumentException($"{nameof(itemCuDto.AttractionId)} must be null when creating a new object");
+        if (itemCuDto.CountryId != null)
+            throw new ArgumentException($"{nameof(itemCuDto.CountryId)} must be null when creating a new object");
 
         //transfer any changes from DTO to database objects
-        //Update individual properties Attraction
-        var item = new AttractionDbM(itemCuDto);
+        //Update individual properties Country
+        var item = new CountryDbM(itemCuDto);
 
         //Update navigation properties
-        await navProp_AttractionCUdto_to_AttractionDbM(itemCuDto, item);
+        await navProp_CountryCUdto_to_CountryDbM(itemCuDto, item);
 
         //Note changes in DbContext and changetracker
-        _dbContext.Attractions.Add(item);
+        _dbContext.Countries.Add(item);
 
         //write to database in a UoW
         await _dbContext.SaveChangesAsync();
 
         //return the updated item in non-flat mode
-        return await ReadAttractionAsync(item.AttractionId, false);
+        return await ReadCountryAsync(item.CountryId, false);
     }
     
-    public async Task<ResponseItemDto<IAttraction>> UpdateAttractionAsync(AttractionCuDto itemDto)
+    public async Task<ResponseItemDto<ICountry>> UpdateCountryAsync(CountryCuDto itemDto)
     {
-        if (itemDto.AttractionId != null)
-            throw new ArgumentException($"{nameof(itemDto.AttractionId)} must be null when creating a new object");
+        if (itemDto.CountryId != null)
+            throw new ArgumentException($"{nameof(itemDto.CountryId)} must be null when creating a new object");
 
-        //Update individual properties Attraction
-        var item = new AttractionDbM(itemDto);
+        //Update individual properties Country
+        var item = new CountryDbM(itemDto);
 
         //Update navigation properties
-        await navProp_AttractionCUdto_to_AttractionDbM(itemDto, item);
+        await navProp_CountryCUdto_to_CountryDbM(itemDto, item);
 
         //Note changes in DbContext
-        _dbContext.Attractions.Add(item);
+        _dbContext.Countries.Add(item);
 
         //write to database
         await _dbContext.SaveChangesAsync();
 
         //return the updated database item in non-flat mode
-        return await ReadAttractionAsync(item.AttractionId, false);
+        return await ReadCountryAsync(item.CountryId, false);
     }
 
-    private async Task navProp_AttractionCUdto_to_AttractionDbM(AttractionCuDto itemDtoSrc, AttractionDbM itemDst)
+    private async Task navProp_CountryCUdto_to_CountryDbM(CountryCuDto itemDtoSrc, CountryDbM itemDst)
     {
         //Assign City
         itemDst.CityDbM = (itemDtoSrc.CityId is not null) ? await _dbContext.Cities.FirstOrDefaultAsync(

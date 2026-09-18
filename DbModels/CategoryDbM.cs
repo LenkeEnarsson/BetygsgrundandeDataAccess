@@ -8,6 +8,7 @@ using System.Text;
 
     using Seido.Utilities.SeedGenerator;
     using Models;
+using models.CuDto;
 
 namespace DbModels
 {
@@ -22,27 +23,28 @@ namespace DbModels
         [JsonIgnore]
         public List<AttractionDbM> AttractionsDbM { get; set; }
 
+        public CategoryDbM() {}
         public new CategoryDbM Seed(SeedGenerator seeder)
         {
             base.Seed(seeder);
             return this;
         }
+        public CategoryDbM (CategoryCuDto org)
+        {
+            if(org.CategoryId is not null) CategoryId = (Guid)org.CategoryId;
+            else CategoryId = Guid.NewGuid();
+
+            Name = org.Name;
+        }
+
+        public CategoryDbM UpdateFromDTO(CategoryCuDto org) //Only updating individual proprties, needs navProp for references
+        {
+            if(org.CategoryId != this.CategoryId) throw new ArgumentException($"Update object and database object does not have the same id.");
+            
+            Name = org.Name;
+
+            return this;
+        }
+
     }
-
-    /// <summary>
-/// Fill individual properties in CategoryDbM from CategoryCuDto. 
-/// Needs navProp_CategoryCUdto_to_CategoryDbM to fill object references.
-/// </summary>
-/// <param name="org"></param>
-/// <returns></returns>
-/// <exception cref="ArgumentException"></exception>
-    public CategoryDbM UpdateFromDTO(CategoryCuDto org)
-    {
-        if(org.CategoryId != this.CategoryId) throw new ArgumentException($"Update object and database object does not have the same id.");
-        
-        Name = org.Name;
-
-        return this;
-    }
-
 }

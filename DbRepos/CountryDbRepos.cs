@@ -188,41 +188,21 @@ public async Task<ResponsePageDto<ICountry>> ReadCountryListAsync(bool seeded = 
 
     private async Task navProp_CountryCUdto_to_CountryDbM(CountryCuDto itemDtoSrc, CountryDbM itemDst)
     {
-        //Assign City
-        itemDst.CityDbM = (itemDtoSrc.CityId is not null) ? await _dbContext.Cities.FirstOrDefaultAsync(
-            a => (a.CityId == itemDtoSrc.CityId)) : null;
-
-        //Assign list of Reviews
-        List<ReviewDbM> reviews = null;
-        if (itemDtoSrc.ReviewsId is not null)
+        //Assign list of Cities
+        List<CityDbM> cities = null;
+        if (itemDtoSrc.CityIds is not null)
         {
-            reviews = new List<ReviewDbM>();
-            foreach (var id in itemDtoSrc.ReviewsId)
+            cities = new List<CityDbM>();
+            foreach (var id in itemDtoSrc.CityIds)
             {
-                var p = await _dbContext.Reviews.FirstOrDefaultAsync(i => i.ReviewId == id);
+                var p = await _dbContext.Cities.FirstOrDefaultAsync(i => i.CityId == id);
                 if (p is null)
-                    throw new ArgumentException($"Review id {id} does not exist.");
+                    throw new ArgumentException($"City id {id} does not exist.");
 
-                reviews.Add(p);
+                cities.Add(p);
             }
         }
-        itemDst.ReviewsDbM = reviews;
-
-        //Assign Categories
-        List<CategoryDbM> categories = null;
-        if (itemDtoSrc.CategoriesId is not null)
-        {
-            categories = new List<CategoryDbM>();
-            foreach (var id in itemDtoSrc.CategoriesId)
-            {
-                var q = await _dbContext.Categories.FirstOrDefaultAsync(i => i.CategoryId == id);
-                if (q == null)
-                    throw new ArgumentException($"Category id {id} does not exist.");
-
-                categories.Add(q);
-            }
-        }
-        itemDst.CategoriesDbM = categories;
+        itemDst.CitiesDbM = cities;
     }
 
 }

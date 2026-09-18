@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using models.CuDto;
+using Models;
 using Seido.Utilities.SeedGenerator;
 using System;
 using System.Collections.Generic;
@@ -23,10 +24,25 @@ namespace DbModels
         [JsonIgnore]
         public List<AttractionDbM> AttractionsDbM { get; set; }
 
-
+        public CityDbM() {}
         public new CityDbM Seed(SeedGenerator seeder)
         {
             base.Seed(seeder);
+            return this;
+        }
+        public CityDbM (CityCuDto org)
+        {
+            if(org.CityId is not null) CityId = (Guid)org.CityId;
+            else CityId = Guid.NewGuid();
+
+            Name = org.Name;
+        }
+        public CityDbM UpdateFromDTO(CityCuDto org)
+        {
+            if(org.CityId != this.CityId) throw new ArgumentException($"Update object and database object does not have the same id.");
+            
+            Name = org.Name;
+
             return this;
         }
     }

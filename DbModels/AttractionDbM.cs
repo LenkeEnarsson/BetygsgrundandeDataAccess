@@ -33,6 +33,7 @@ public class AttractionDbM : Attraction, ISeed<AttractionDbM>
         return this;
     }
 
+
     public AttractionDbM (AttractionCuDto org)
     {
         if(org.AttractionId is not null) AttractionId = (Guid)org.AttractionId;
@@ -41,14 +42,6 @@ public class AttractionDbM : Attraction, ISeed<AttractionDbM>
         Name = org.Name;
         Description = org.Description;
     }
-
-/// <summary>
-/// Fill individual properties in AttractionDbM from AttractionCuDto. 
-/// Needs navProp_AttractionCUdto_to_AttractionDbM to fill object references.
-/// </summary>
-/// <param name="org"></param>
-/// <returns></returns>
-/// <exception cref="ArgumentException"></exception>
     public AttractionDbM UpdateFromDTO(AttractionCuDto org)
     {
         if(org.AttractionId != this.AttractionId) throw new ArgumentException($"Update object and database object does not have the same id.");

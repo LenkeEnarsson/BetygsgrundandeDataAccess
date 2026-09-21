@@ -108,7 +108,7 @@ public class AttractionCuDto
     {
         AttractionId = org.AttractionId;
         CityId = org?.City?.CityId;
-        Name = org.Name;
+        Name = org.Title;
         Description = org.Description;
 
         CategoriesId = org.Categories?.Select(i => i.CategoryId).ToList();
@@ -138,7 +138,7 @@ public record UserCuDto
         public required string Password { get; init; }
         public required string FirstName { get; init; }
         public required string LastName { get; init; }
-        public virtual List<Guid> ReviewsId { get; set; } = null;
+        public virtual List<Guid> ReviewIds { get; set; } = null;
 
 
 #if DEBUG
@@ -154,7 +154,7 @@ public record UserCuDto
         LastName = org.LastName;
         Password = org.Password;
 
-        ReviewsId = org.Reviews?.Select(i => i.ReviewId).ToList();
+        ReviewIds = org.Reviews?.Select(i => i.ReviewId).ToList();
     }
 
     public void EnsureValidity()
@@ -182,7 +182,7 @@ public class ReviewCuDto
     public Guid? AttractionId { get; set; }
     public string Comment { get; set; }
     public byte? Score { get; set; }
-    public Guid? Author { get; set; }
+    public Guid? AuthorId { get; set; }
     public DateTime? DateMade { get; set; }
 
 #if DEBUG
@@ -196,13 +196,13 @@ public class ReviewCuDto
         AttractionId = org?.Attraction.AttractionId;
         Comment = org.Comment;
         Score = org.Score;
-        Author = org.Author.UserId;
+        AuthorId = org.Author.UserId;
         DateMade = org.DateMade;
     }
 
     public void EnsureValidity()
     {
-        if (AttractionId is null || Author is null)
+        if (AttractionId is null || AuthorId is null)
             throw new ArgumentException("Review must be connected to an attraction and an author.");
         
         if (string.IsNullOrEmpty(Comment) || Comment.Length > 1000 || Score is null || Score <1 || Score >5)

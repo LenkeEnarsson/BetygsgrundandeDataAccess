@@ -20,7 +20,7 @@ public interface IAttraction
 {
     public Guid AttractionId { get; set; }
     public ICity City { get; set; }
-    public string Name { get; set; }
+    public string Title { get; set; }
     public string Description { get; set; }
 
 

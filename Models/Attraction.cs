@@ -7,7 +7,7 @@ public class Attraction : IAttraction, ISeed<Attraction>
 {
     public virtual Guid AttractionId { get; set; }
     public virtual ICity City { get; set; }
-    public string Name { get; set; }
+    public string Title { get; set; }
     public string Description { get; set; }
 
     public virtual List<ICategory> Categories { get; set; } = [];
@@ -19,7 +19,7 @@ public class Attraction : IAttraction, ISeed<Attraction>
     {
         AttractionId = org.AttractionId;
         City = org.City;
-        Name = org.Name;
+        Title = org.Title;
         Description = org.Description;
 
         foreach (var c in org.Categories)
@@ -37,7 +37,7 @@ public class Attraction : IAttraction, ISeed<Attraction>
     {
         Seeded = true;
         AttractionId = Guid.NewGuid();
-        Name = seeder.MusicGroupName;
+        Title = seeder.MusicGroupName;
         Description = seeder.LatinParagraph;
 
         return this;

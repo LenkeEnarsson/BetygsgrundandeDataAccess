@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using models.CuDto;
+using Models;
 using Models.DTO;
 using Seido.Utilities.SeedGenerator;
 using System;
@@ -20,6 +21,23 @@ namespace DbModels
         [JsonIgnore]
         public List<ReviewDbM> ReviewsDbM { get; set; }
 
+        public UserDbM() {}
+        public new UserDbM Seed(SeedGenerator seeder)
+        {
+            base.Seed(seeder);
+            return this;
+        }
+        public UserDbM (UserCuDto org)
+        {
+            if(org.UserId is not null) UserId = (Guid)org.UserId;
+            else UserId = Guid.NewGuid();
+
+            Email = org.Email;
+            Username = org.Username;
+            FirstName = org.FirstName;
+            LastName = org.LastName;
+            Password = org.Password;
+        }
         public UserDbM UpdateFromDto (UserCuDto org)
         {
             if(org.UserId is null) UserId = Guid.NewGuid();
@@ -29,11 +47,6 @@ namespace DbModels
             FirstName = org.FirstName;
             LastName = org.LastName;
             Password = org.Password;
-            return this;
-        }
-        public new UserDbM Seed(SeedGenerator seeder)
-        {
-            base.Seed(seeder);
             return this;
         }
     }

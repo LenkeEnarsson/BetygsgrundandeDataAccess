@@ -39,14 +39,14 @@ public class AttractionDbM : Attraction, ISeed<AttractionDbM>
         if(org.AttractionId is not null) AttractionId = (Guid)org.AttractionId;
         else AttractionId = Guid.NewGuid();
 
-        Name = org.Name;
+        Title = org.Name;
         Description = org.Description;
     }
     public AttractionDbM UpdateFromDTO(AttractionCuDto org)
     {
         if(org.AttractionId != this.AttractionId) throw new ArgumentException($"Update object and database object does not have the same id.");
         
-        Name = org.Name;
+        Title = org.Name;
         Description = org.Description;
 
         return this;

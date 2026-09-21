@@ -14,6 +14,7 @@ namespace AppWebApi.Controllers
     [Route("api/[controller]/[action]")]
     public class AttractionController : Controller
     {
+        #region fields & constructors
         readonly IAttractionService _service;
         readonly ILogger<AttractionController> _logger;
 
@@ -22,6 +23,7 @@ namespace AppWebApi.Controllers
             _service = service;
             _logger = logger;
         }
+        #endregion
     
         [HttpGet()]
         [ActionName(nameof(ReadAttractionList))]
@@ -83,7 +85,7 @@ namespace AppWebApi.Controllers
             }
         }
 
-        [HttpGet()]
+        [HttpGet()] //Fetch CuDto template for Update or Create
         [ActionName(nameof(ReadItemCuDto))]
         [ProducesResponseType(200, Type = typeof(AttractionCuDto))]
         [ProducesResponseType(400, Type = typeof(string))]

@@ -104,13 +104,13 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool see
                 DbItemsCount = await query
                 //Adding filter functionality
                 .Where(i => (i.Seeded == seeded) &&
-                                i.Name.ToLower().Contains(filter)).CountAsync(),
+                                i.Title.ToLower().Contains(filter)).CountAsync(),
 
                 PageItems = await query
 
                 //Adding filter functionality
                 .Where(i => (i.Seeded == seeded) &&
-                            i.Name.ToLower().Contains(filter))
+                            i.Title.ToLower().Contains(filter))
 
                 //Adding paging
                 .Skip(pageNumber * pageSize)
@@ -157,7 +157,7 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool see
         var item = new AttractionDbM(itemCuDto);
 
         //Update navigation properties
-        await navProp_AttractionCUdto_to_AttractionDbM(itemCuDto, item);
+        await navProp_AttractionCuDto_to_AttractionDbM(itemCuDto, item);
 
         //Note changes in DbContext and changetracker
         _dbContext.Attractions.Add(item);
@@ -178,7 +178,7 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool see
         var item = new AttractionDbM(itemDto);
 
         //Update navigation properties
-        await navProp_AttractionCUdto_to_AttractionDbM(itemDto, item);
+        await navProp_AttractionCuDto_to_AttractionDbM(itemDto, item);
 
         //Note changes in DbContext
         _dbContext.Attractions.Add(item);
@@ -190,7 +190,7 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool see
         return await ReadAttractionAsync(item.AttractionId, false);
     }
 
-    private async Task navProp_AttractionCUdto_to_AttractionDbM(AttractionCuDto itemDtoSrc, AttractionDbM itemDst)
+    private async Task navProp_AttractionCuDto_to_AttractionDbM(AttractionCuDto itemDtoSrc, AttractionDbM itemDst)
     {
         //Assign City
         itemDst.CityDbM = (itemDtoSrc.CityId is not null) ? await _dbContext.Cities.FirstOrDefaultAsync(

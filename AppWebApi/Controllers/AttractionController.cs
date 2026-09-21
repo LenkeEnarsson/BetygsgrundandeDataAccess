@@ -46,6 +46,26 @@ namespace AppWebApi.Controllers
         }
 
         [HttpGet()]
+        [ActionName(nameof(ReadAttractionListNoReviews))]
+        [ProducesResponseType(200, Type = typeof(AttractionCuDto))]
+        [ProducesResponseType(400, Type = typeof(string))]
+        public async Task<IActionResult> ReadAttractionListNoReviews(bool seeded, bool flat, string filter, int pageNumber, int pageSize = 10)
+        {
+            try
+            {
+                var response = await _service.ReadAttractionListNoReviewsAsync(seeded, flat, filter, pageNumber, pageSize);
+                if (response is null) throw new ArgumentException($"No attractions without reviews exist in the database.");
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{nameof(ReadAttractionListNoReviews)}: {ex.Message} - {ex.InnerException?.Message}");
+                return BadRequest($"{ex.Message} - {ex.InnerException?.Message}");
+            }
+        }
+
+        [HttpGet()]
         [ActionName(nameof(ReadAttraction))]
         [ProducesResponseType(200, Type = typeof(AttractionCuDto))]
         [ProducesResponseType(400, Type = typeof(string))]

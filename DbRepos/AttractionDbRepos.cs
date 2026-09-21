@@ -104,6 +104,82 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool see
                 DbItemsCount = await query
                 //Adding filter functionality
                 .Where(i => (i.Seeded == seeded) &&
+                                  (i.CategoriesDbM.Any(c => c.Name.ToLower().Contains(filter))
+                                || i.Title.ToLower().Contains(filter) 
+                                || i.Description.ToLower().Contains(filter)
+                                || i.CityDbM.Name.ToLower().Contains(filter)
+                                || i.CityDbM.CountryDbM.Name.ToLower().Contains(filter))).CountAsync(),
+
+                PageItems = await query
+
+                //Adding filter functionality
+                .Where(i => (i.Seeded == seeded) &&
+                                  (i.CategoriesDbM.Any(c => c.Name.ToLower().Contains(filter))
+                                || i.Title.ToLower().Contains(filter) 
+                                || i.Description.ToLower().Contains(filter)
+                                || i.CityDbM.Name.ToLower().Contains(filter)
+                                || i.CityDbM.CountryDbM.Name.ToLower().Contains(filter)))
+
+                //Adding paging
+                .Skip(pageNumber * pageSize)
+                .Take(pageSize)
+
+                .ToListAsync<IAttraction>(),
+
+                PageNr = pageNumber,
+                PageSize = pageSize
+            };
+    }
+
+public async Task<ResponsePageDto<IAttraction>> ReadAttractionListNoReviewsAsync(bool seeded = false, bool flat = true, string filter = "", int pageNumber = 0, int pageSize = 10)
+    {
+        IQueryable<AttractionDbM> query;
+        if (flat)
+        {
+            query = _dbContext.Attractions.AsNoTracking();
+        }
+        else
+        {
+            query = _dbContext.Attractions.AsNoTracking()
+                .Include(i => i.CityDbM)
+                .Include(i => i.CategoriesDbM);
+        }
+
+        if (string.IsNullOrEmpty(filter))
+            return new ResponsePageDto<IAttraction>()
+            {
+#if DEBUG
+                ConnectionString = _dbContext.dbConnection,
+#endif
+
+                DbItemsCount = await query
+                //Adding filter functionality
+                .Where(i => (i.Seeded == seeded)).CountAsync(),
+
+                PageItems = await query
+
+                //Adding filter functionality
+                .Where(i => (i.Seeded == seeded))
+
+                //Adding paging
+                .Skip(pageNumber * pageSize)
+                .Take(pageSize)
+
+                .ToListAsync<IAttraction>(),
+
+                PageNr = pageNumber,
+                PageSize = pageSize
+            };
+        else
+            return new ResponsePageDto<IAttraction>()
+            {
+#if DEBUG
+                ConnectionString = _dbContext.dbConnection,
+#endif
+
+                DbItemsCount = await query
+                //Adding filter functionality
+                .Where(i => (i.Seeded == seeded) &&
                                 i.Title.ToLower().Contains(filter)).CountAsync(),
 
                 PageItems = await query

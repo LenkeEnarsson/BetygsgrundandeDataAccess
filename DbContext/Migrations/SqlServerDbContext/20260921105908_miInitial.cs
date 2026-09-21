@@ -95,8 +95,8 @@ namespace DbContext.Migrations.SqlServerDbContext
                 {
                     AttractionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CityDbMCityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "varchar(200)", nullable: true),
-                    Description = table.Column<string>(type: "varchar(200)", nullable: true),
+                    Title = table.Column<string>(type: "varchar(200)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(1000)", nullable: true),
                     Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -146,7 +146,7 @@ namespace DbContext.Migrations.SqlServerDbContext
                     ReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AttractionDbMAttractionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserDbMUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Comment = table.Column<string>(type: "varchar(200)", nullable: true),
+                    Comment = table.Column<string>(type: "nvarchar(1000)", nullable: true),
                     Score = table.Column<byte>(type: "tinyint", nullable: false),
                     DateMade = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Seeded = table.Column<bool>(type: "bit", nullable: false)

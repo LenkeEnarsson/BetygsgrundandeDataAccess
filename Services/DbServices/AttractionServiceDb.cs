@@ -26,6 +26,8 @@ public class AttractionServiceDb : IAttractionService
 
     public Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
     => _repo.ReadAttractionListAsync(seeded, flat, filter, pageNumber, pageSize);
+    public Task<ResponsePageDto<IAttraction>> ReadAttractionListNoReviewsAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
+    => _repo.ReadAttractionListNoReviewsAsync(seeded, flat, filter, pageNumber, pageSize);
     public Task<ResponseItemDto<IAttraction>> ReadAttractionAsync(Guid id, bool flat)
     => _repo.ReadAttractionAsync(id, flat);
     public Task<ResponseItemDto<IAttraction>> DeleteAttractionAsync(Guid id)

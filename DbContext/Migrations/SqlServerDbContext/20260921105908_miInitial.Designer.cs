@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbContext.Migrations.SqlServerDbContext
 {
     [DbContext(typeof(MainDbContext.SqlServerDbContext))]
-    [Migration("20260918080202_miInitial")]
+    [Migration("20260921105908_miInitial")]
     partial class miInitial
     {
         /// <inheritdoc />
@@ -50,13 +50,13 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<bool>("Seeded")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("varchar(200)");
 
                     b.HasKey("AttractionId");
 
@@ -131,7 +131,7 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comment")
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<DateTime>("DateMade")
                         .HasColumnType("datetime2");

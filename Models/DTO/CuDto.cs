@@ -132,12 +132,12 @@ public class AttractionCuDto
 
 public record UserCuDto
 {
-        public required Guid? UserId { get; init; }
-        public required string Email { get; init; }
-        public required string Username { get; init; }
-        public required string Password { get; init; }
-        public required string FirstName { get; init; }
-        public required string LastName { get; init; }
+        public Guid? UserId { get; init; }
+        public string Email { get; init; }
+        public string Username { get; init; }
+        public string Password { get; init; }
+        public string FirstName { get; init; }
+        public string LastName { get; init; }
         public virtual List<Guid> ReviewIds { get; set; } = null;
 
 

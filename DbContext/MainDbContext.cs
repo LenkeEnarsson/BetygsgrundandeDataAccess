@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 using Configuration;
 using DbModels;
+using Models.DTO;
 using Microsoft.Extensions.Hosting.Internal;
 using DbContext.Extensions;
 
@@ -32,6 +33,11 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
     public DbSet<UserDbM> Users { get; set; }
     #endregion
 
+    #region Views
+    public DbSet<GstUsrInfoDbDto> InfoDbView { get; set; }
+
+    #endregion
+
     #region constructors
     public MainDbContext() { }
     public MainDbContext(DbContextOptions options, DatabaseConnections databaseConnections) : base(options)
@@ -46,7 +52,7 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
         base.OnModelCreating(modelBuilder);
     }
 
-    #region DbContext for some popular databases
+    #region DbContext SQL Server
     public class SqlServerDbContext : MainDbContext
     {
         public SqlServerDbContext() { }
@@ -69,23 +75,25 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
         {
             configurationBuilder.Properties<decimal>().HaveColumnType("money");
-            configurationBuilder.Properties<string>().HaveColumnType("varchar(200)");
+            configurationBuilder.Properties<string>().HaveColumnType("nvarchar(200)");
 
             base.ConfigureConventions(configurationBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //Descriptions and reviews are allowed to be 1000 characters
+            //Descriptions and reviews character limit set to 1000
             modelBuilder.Entity<AttractionDbM>()
                 .Property(a => a.Description).HasColumnType("nvarchar(1000)");
             modelBuilder.Entity<ReviewDbM>()
                 .Property(a => a.Comment).HasColumnType("nvarchar(1000)");
-
+            
             base.OnModelCreating(modelBuilder);
         }
     }
+    #endregion
 
+    #region DbContext MySQL and Postgres
     public class MySqlDbContext : MainDbContext
     {
         public MySqlDbContext() { }

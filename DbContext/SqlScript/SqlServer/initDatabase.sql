@@ -1,4 +1,4 @@
-USE [sql-friends];
+USE [sql-attractions];
 GO
 
 --create a schemas
@@ -11,65 +11,46 @@ GO
 
 --create a view that gives overview of the database content
 CREATE OR ALTER VIEW gstusr.vwInfoDb AS
-    SELECT (SELECT COUNT(*) FROM supusr.Friends WHERE Seeded = 1) as nrSeededFriends, 
-        (SELECT COUNT(*) FROM supusr.Friends WHERE Seeded = 0) as nrUnseededFriends,
-        (SELECT COUNT(*) FROM supusr.Friends WHERE AddressId IS NOT NULL) as nrFriendsWithAddress,
-        (SELECT COUNT(*) FROM supusr.Addresses WHERE Seeded = 1) as nrSeededAddresses, 
-        (SELECT COUNT(*) FROM supusr.Addresses WHERE Seeded = 0) as nrUnseededAddresses,
-        (SELECT COUNT(*) FROM supusr.Pets WHERE Seeded = 1) as nrSeededPets, 
-        (SELECT COUNT(*) FROM supusr.Pets WHERE Seeded = 0) as nrUnseededPets,
-        (SELECT COUNT(*) FROM supusr.Quotes WHERE Seeded = 1) as nrSeededQuotes, 
-        (SELECT COUNT(*) FROM supusr.Quotes WHERE Seeded = 0) as nrUnseededQuotes;
+    SELECT (SELECT COUNT(*) FROM dbo.Users) as nrUsers, 
+        (SELECT COUNT(*) FROM suprusr.Attractions a JOIN usr.Reviews r ON a.AttractionId = r.AttractionDbMAttractionId) as nrAttractionsWithReviews,
+        (SELECT COUNT(*) FROM suprusr.Attractions a FULL OUTER JOIN usr.Reviews r ON a.AttractionId = r.AttractionDbMAttractionId WHERE r.AttractionDbMAttractionId IS NULL) as nrAttractionsWithoutReviews,
+        (SELECT COUNT(*) FROM suprusr.Attractions) as nrTotalAttractions,
+        (SELECT COUNT(*) FROM suprusr.Categories) as nrCategories, 
+        (SELECT COUNT(*) FROM suprusr.Countries) as nrCountries,
+        (SELECT COUNT(*) FROM suprusr.Cities) as nrCities,
+        (SELECT COUNT(*) FROM usr.Reviews) as nrReviews;
 GO
 
-CREATE OR ALTER VIEW gstusr.vwInfoAttractions AS
-    SELECT strKind AS AnimalKind, COUNT(strKind) AS NrPets FROM supusr.Pets
-    GROUP BY strKind;
-GO
-
-CREATE OR ALTER VIEW gstusr.vwInfoFriends AS
-    SELECT a.Country, a.City, COUNT(*) as NrFriends  FROM supusr.Friends f
-    INNER JOIN supusr.Addresses a ON f.AddressId = a.AddressId
-    GROUP BY a.Country, a.City WITH ROLLUP;
-GO
-
-CREATE OR ALTER VIEW gstusr.vwInfoPets AS
-    SELECT a.Country, a.City, COUNT(p.PetId) as NrPets FROM supusr.Friends f
-    INNER JOIN supusr.Addresses a ON f.AddressId = a.AddressId
-    INNER JOIN supusr.Pets p ON p.FriendId = f.FriendId
-    GROUP BY a.Country, a.City WITH ROLLUP;
-GO
-
-CREATE OR ALTER VIEW gstusr.vwInfoQuotes AS
-    SELECT Author, COUNT(QuoteText) as NrQuotes FROM supusr.Quotes 
-    GROUp BY Author;
-GO
-
---create the DeleteAll procedure
-CREATE OR ALTER PROC supusr.spDeleteAll
+-- Delete Seed SP
+CREATE OR ALTER PROCEDURE dbo.spDeleteSeeded
     @seededParam BIT = 1,
 
-    @nrFriendsAffected INT OUTPUT,
-    @nrAddressesAffected INT OUTPUT,
-    @nrPetsAffected INT OUTPUT,
-    @nrQuotesAffected INT OUTPUT
-    
-    AS
+    @nrAttractionsAffected INT OUTPUT,
+    @nrCitiesAffected INT OUTPUT,
+    @nrCountriesAffected INT OUTPUT,
+    @nrUsersAffected INT OUTPUT,
+    @nrReviewsAffected INT OUTPUT
+AS
+BEGIN TRY
 
     SET NOCOUNT ON;
 
-    SELECT  @nrFriendsAffected = COUNT(*) FROM supusr.Friends WHERE Seeded = @seededParam;
-    SELECT  @nrAddressesAffected = COUNT(*) FROM supusr.Addresses WHERE Seeded = @seededParam;
-    SELECT  @nrPetsAffected = COUNT(*) FROM supusr.Pets WHERE Seeded = @seededParam;
-    SELECT  @nrQuotesAffected = COUNT(*) FROM supusr.Quotes WHERE Seeded = @seededParam;
+    SELECT  @nrAttractionsAffected = COUNT(*) FROM suprusr.Attractions WHERE Seeded = @seededParam;
+    SELECT  @nrCitiesAffected = COUNT(*) FROM suprusr.Cities WHERE Seeded = @seededParam;
+    SELECT  @nrCountriesAffected = COUNT(*) FROM suprusr.Countries WHERE Seeded = @seededParam;
+    SELECT  @nrUsersAffected = COUNT(*) FROM dbo.Users WHERE Seeded = @seededParam;
+    SELECT  @nrReviewsAffected = COUNT(*) FROM usr.Reviews WHERE Seeded = @seededParam;
 
-    DELETE FROM supusr.Friends WHERE Seeded = @seededParam;
-    DELETE FROM supusr.Addresses WHERE Seeded = @seededParam;
-    DELETE FROM supusr.Pets WHERE Seeded = @seededParam;
-    DELETE FROM supusr.Quotes WHERE Seeded = @seededParam;
-
-    --throw our own error
-    --;THROW 999999, 'Error occurred in supusr.spDeleteAll', 1
+    DELETE FROM suprusr.Attractions WHERE Seeded = @seededParam;
+    DELETE FROM suprusr.Cities WHERE Seeded = @seededParam;
+    DELETE FROM suprusr.Countries WHERE Seeded = @seededParam;
+    DELETE FROM dbo.Users WHERE Seeded = @seededParam;
+    DELETE FROM usr.Reviews WHERE Seeded = @seededParam;
 
     SELECT * FROM gstusr.vwInfoDb;
+END TRY
+
+    BEGIN CATCH
+    THROW 99999, 'Error occurred while deleting seeded data.', 1;
+    END CATCH
 GO

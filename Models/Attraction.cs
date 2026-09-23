@@ -1,4 +1,5 @@
 using Seido.Utilities.SeedGenerator;
+using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
 
 namespace Models;
@@ -37,8 +38,8 @@ public class Attraction : IAttraction, ISeed<Attraction>
     {
         Seeded = true;
         AttractionId = Guid.NewGuid();
+        Description = seeder.LatinSentence;
         Title = seeder.MusicGroupName;
-        Description = seeder.LatinParagraph;
 
         return this;
     }

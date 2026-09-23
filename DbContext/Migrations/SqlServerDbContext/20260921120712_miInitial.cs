@@ -26,7 +26,7 @@ namespace DbContext.Migrations.SqlServerDbContext
                 columns: table => new
                 {
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "varchar(200)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(200)", nullable: true),
                     Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -40,7 +40,7 @@ namespace DbContext.Migrations.SqlServerDbContext
                 columns: table => new
                 {
                     CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "varchar(200)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(200)", nullable: true),
                     Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -54,11 +54,11 @@ namespace DbContext.Migrations.SqlServerDbContext
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Username = table.Column<string>(type: "varchar(200)", nullable: true),
-                    Email = table.Column<string>(type: "varchar(200)", nullable: true),
-                    Password = table.Column<string>(type: "varchar(200)", nullable: true),
-                    FirstName = table.Column<string>(type: "varchar(200)", nullable: true),
-                    LastName = table.Column<string>(type: "varchar(200)", nullable: true),
+                    Username = table.Column<string>(type: "nvarchar(200)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(200)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(200)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(200)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(200)", nullable: true),
                     Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -73,7 +73,7 @@ namespace DbContext.Migrations.SqlServerDbContext
                 {
                     CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CountryDbMCountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "varchar(200)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(200)", nullable: true),
                     Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -95,7 +95,7 @@ namespace DbContext.Migrations.SqlServerDbContext
                 {
                     AttractionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CityDbMCityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "varchar(200)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(200)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(1000)", nullable: true),
                     Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },

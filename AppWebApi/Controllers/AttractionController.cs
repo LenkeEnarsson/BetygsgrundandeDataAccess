@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
 
-using Models;
 using Services;
 using Microsoft.AspNetCore.Authorization;
 using models.CuDto;
@@ -94,7 +93,7 @@ namespace AppWebApi.Controllers
             try
             {
                 var response = await _service.DeleteAttractionAsync(id);
-                if (response is null) throw new ArgumentException($"No attraction with id {id} the database.");
+                if (response is null) throw new ArgumentException($"No attraction with id {id} in the database.");
 
                 return Ok(response);
             }

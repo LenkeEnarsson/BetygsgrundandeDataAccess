@@ -1,7 +1,7 @@
 USE [sql-attractions];
 GO
 
---create a schemas
+--create schemas
 IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'gstusr')
     EXEC('CREATE SCHEMA gstusr');
 GO
@@ -9,7 +9,7 @@ IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'usr')
     EXEC('CREATE SCHEMA usr');
 GO
 
---create a view that gives overview of the database content
+--View for database info shown to guest
 CREATE OR ALTER VIEW gstusr.vwInfoDb AS
     SELECT (SELECT COUNT(*) FROM dbo.Users) as nrUsers, 
         (SELECT COUNT(*) FROM suprusr.Attractions a JOIN usr.Reviews r ON a.AttractionId = r.AttractionDbMAttractionId) as nrAttractionsWithReviews,
@@ -21,9 +21,9 @@ CREATE OR ALTER VIEW gstusr.vwInfoDb AS
         (SELECT COUNT(*) FROM usr.Reviews) as nrReviews;
 GO
 
--- Delete Seed SP
+-- SP Delete Seed
 CREATE OR ALTER PROCEDURE dbo.spDeleteSeeded
-    @seededParam BIT = 1,
+    @seededParam BIT = 1, --true
 
     @nrAttractionsAffected INT OUTPUT,
     @nrCitiesAffected INT OUTPUT,
@@ -47,7 +47,7 @@ BEGIN TRY
     DELETE FROM dbo.Users WHERE Seeded = @seededParam;
     DELETE FROM usr.Reviews WHERE Seeded = @seededParam;
 
-    SELECT * FROM gstusr.vwInfoDb;
+    SELECT * FROM gstusr.VwInfoDb;
 END TRY
 
     BEGIN CATCH

@@ -41,9 +41,18 @@ public class AdminDbRepos
         var users = seeder.ItemsToList<UserDbM>(100);
         var reviews = seeder.ItemsToList<ReviewDbM>(30);
 
-        //Add foreign key relations
-        foreach (var c in cities)
-            c.CountryDbM = countries[rnd.Next(countries. Count)];
+        #region Add foreign key relations
+
+        foreach (var r in reviews)
+        {
+            r.AttractionDbM = attractions[rnd.Next(attractions.Count)];
+            r.UserDbM = users[rnd.Next(users.Count)];
+        }
+
+        foreach (var u in users)
+            u.ReviewsDbM = reviews
+                .Where(r => r.UserDbM.UserId == u.UserId)
+                .ToList();
 
         foreach (var a in attractions)
         {
@@ -54,13 +63,31 @@ public class AdminDbRepos
                             .Take(rnd.Next(1,4))
                             .Select(x => x.Category)
                             .ToList();
+            a.ReviewsDbM = reviews
+                .Where(b => b.AttractionDbM.AttractionId == a.AttractionId)
+                .ToList();
         }
 
-        foreach (var r in reviews)
+        foreach (var c in categories)
+            c.AttractionsDbM = attractions
+                .Where(a => a.CategoriesDbM
+                .Contains(c))
+                .ToList();
+
+        foreach (var c in cities)
         {
-            r.AttractionDbM = attractions[rnd.Next(attractions.Count)];
-            r.UserDbM = users[rnd.Next(users.Count)];
+            c.CountryDbM = countries[rnd.Next(countries.Count)];
+            c.AttractionsDbM = attractions
+                .Where(a => a.CityDbM.CityId == c.CityId)
+                .ToList();
         }
+        foreach (var c in countries)
+            c.CitiesDbM = cities
+                .Where(ci => ci.CountryDbM.CountryId == c.CountryId)
+                .ToList();
+
+
+        #endregion
 
         //Add to database
         _dbContext.Categories.AddRange(categories);
@@ -88,7 +115,7 @@ public class AdminDbRepos
 
     public async Task<GstUsrInfoDbDto> GuestDbInfoAsync()
     {
-        var info = await _dbContext.InfoDbView.FirstOrDefaultAsync();
+        var info = await _dbContext.VwInfoDb.FirstOrDefaultAsync();
         return info;
     }
 

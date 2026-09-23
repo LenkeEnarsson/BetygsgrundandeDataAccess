@@ -75,7 +75,7 @@ public class CityCuDto
     public CityCuDto(ICity org)
     {
         CityId = org.CityId;
-        Name = org.Name;
+        Name = org.CityName;
         AttractionIds = org.Attractions?.Select(i => i.AttractionId).ToList();
     }
 
@@ -196,7 +196,7 @@ public class ReviewCuDto
         AttractionId = org?.Attraction.AttractionId;
         Comment = org.Comment;
         Score = org.Score;
-        AuthorId = org.Author.UserId;
+        AuthorId = org.UserId.UserId;
         DateMade = org.DateMade;
     }
 

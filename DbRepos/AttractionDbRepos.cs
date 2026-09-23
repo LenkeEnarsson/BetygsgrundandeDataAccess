@@ -54,9 +54,9 @@ public class AttractionDbRepos
         };
     }
 
-public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool seeded = false, bool flat = true, string filter = "", int pageNumber = 0, int pageSize = 10)
+public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool seeded = false, bool flat = true, string filter = "", int pageNumber = 1, int pageSize = 10)
     {
-        IQueryable<AttractionDbM> query;
+         IQueryable<AttractionDbM> query;
         if (flat)
         {
             query = _dbContext.Attractions.AsNoTracking();
@@ -107,7 +107,7 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool see
                                   (i.CategoriesDbM.Any(c => c.Name.ToLower().Contains(filter))
                                 || i.Title.ToLower().Contains(filter) 
                                 || i.Description.ToLower().Contains(filter)
-                                || i.CityDbM.Name.ToLower().Contains(filter)
+                                || i.CityDbM.CityName.ToLower().Contains(filter)
                                 || i.CityDbM.CountryDbM.Name.ToLower().Contains(filter))).CountAsync(),
 
                 PageItems = await query
@@ -117,7 +117,7 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool see
                                   (i.CategoriesDbM.Any(c => c.Name.ToLower().Contains(filter))
                                 || i.Title.ToLower().Contains(filter) 
                                 || i.Description.ToLower().Contains(filter)
-                                || i.CityDbM.Name.ToLower().Contains(filter)
+                                || i.CityDbM.CityName.ToLower().Contains(filter)
                                 || i.CityDbM.CountryDbM.Name.ToLower().Contains(filter)))
 
                 //Adding paging

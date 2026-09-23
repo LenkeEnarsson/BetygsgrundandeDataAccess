@@ -18,7 +18,7 @@ public class ReviewDbM : Review, ISeed<ReviewDbM>
     [Required]
     public AttractionDbM AttractionDbM {get;set;}
 
-    [NotMapped] public override IUser Author{ get => UserDbM; set => throw new NotImplementedException(); }
+    [NotMapped] public override IUser UserId{ get => UserDbM; set => throw new NotImplementedException(); }
     [Required] public UserDbM UserDbM { get; set; }
 
     public ReviewDbM() {}

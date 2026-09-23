@@ -11,7 +11,7 @@ public interface ICity
 {
     public Guid CityId { get; set; }
     public ICountry Country { get; set; }
-    public string Name { get; set; }
+    public string CityName { get; set; }
 
     public List<IAttraction> Attractions { get; set; }
 }
@@ -42,7 +42,7 @@ public interface IReview
     public IAttraction Attraction { get; set; }
     public string Comment { get; set; }
     public byte Score { get; set; }
-    public IUser Author { get; set; }
+    public IUser UserId { get; set; }
     public DateTime DateMade { get; set; }
 
 }

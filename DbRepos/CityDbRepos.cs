@@ -102,13 +102,13 @@ public async Task<ResponsePageDto<ICity>> ReadCityListAsync(bool seeded = false,
                 DbItemsCount = await query
                 //Adding filter functionality
                 .Where(i => (i.Seeded == seeded) &&
-                                i.Name.ToLower().Contains(filter)).CountAsync(),
+                                i.CityName.ToLower().Contains(filter)).CountAsync(),
 
                 PageItems = await query
 
                 //Adding filter functionality
                 .Where(i => (i.Seeded == seeded) &&
-                            i.Name.ToLower().Contains(filter))
+                            i.CityName.ToLower().Contains(filter))
 
                 //Adding paging
                 .Skip(pageNumber * pageSize)

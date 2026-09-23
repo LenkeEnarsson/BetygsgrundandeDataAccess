@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbContext.Migrations.SqlServerDbContext
 {
     [DbContext(typeof(MainDbContext.SqlServerDbContext))]
-    [Migration("20260921120712_miInitial")]
+    [Migration("20260923125046_miInitial")]
     partial class miInitial
     {
         /// <inheritdoc />
@@ -88,11 +88,11 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("CityName")
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<Guid>("CountryDbMCountryId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(200)");
 
                     b.Property<bool>("Seeded")
                         .HasColumnType("bit");
@@ -181,6 +181,37 @@ namespace DbContext.Migrations.SqlServerDbContext
                     b.HasKey("UserId");
 
                     b.ToTable("Users", "dbo");
+                });
+
+            modelBuilder.Entity("Models.DTO.GstUsrInfoDbDto", b =>
+                {
+                    b.Property<int>("NrAttractionsWithReviews")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NrAttractionsWithoutReviews")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NrCategories")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NrCities")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NrCountries")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NrReviews")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NrTotalAttractions")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NrUsers")
+                        .HasColumnType("int");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("VwInfoDb", "gstusr");
                 });
 
             modelBuilder.Entity("AttractionDbMCategoryDbM", b =>

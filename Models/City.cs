@@ -9,7 +9,7 @@ namespace Models
     {
         public virtual Guid CityId { get; set; }
         public virtual ICountry Country { get; set; }
-        public string Name { get; set; }
+        public string CityName { get; set; }
 
         public virtual List<IAttraction> Attractions { get; set; } = [];
 
@@ -19,14 +19,14 @@ namespace Models
         {
             CityId = org.CityId;
             Country = org.Country;
-            Name = org.Name;
+            CityName = org.CityName;
             foreach (var a in org.Attractions)
                 Attractions.Add(a);
 
             Seeded = org.Seeded;
         }
 
-        public bool Equals(City other) => (this.Name, this.Country) == (other.Name, other.Country);
+        public bool Equals(City other) => (this.CityName, this.Country) == (other.CityName, other.Country);
         #endregion
 
         #region Seeding

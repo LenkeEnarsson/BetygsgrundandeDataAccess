@@ -35,13 +35,13 @@ namespace DbModels
             if(org.CityId is not null) CityId = (Guid)org.CityId;
             else CityId = Guid.NewGuid();
 
-            Name = org.Name;
+            CityName = org.Name;
         }
         public CityDbM UpdateFromDTO(CityCuDto org)
         {
             if(org.CityId != this.CityId) throw new ArgumentException($"Update object and database object does not have the same id.");
             
-            Name = org.Name;
+            CityName = org.Name;
 
             return this;
         }

@@ -34,7 +34,7 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
     #endregion
 
     #region Views
-    public DbSet<GstUsrInfoDbDto> InfoDbView { get; set; }
+    public DbSet<GstUsrInfoDbDto> VwInfoDb { get; set; }
 
     #endregion
 
@@ -46,9 +46,51 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
     }
     #endregion
 
-    //Here we can modify the migration building
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        
+        #region Model views
+        modelBuilder.Entity<GstUsrInfoDbDto>().ToView(nameof(VwInfoDb), "gstusr").HasNoKey();
+        #endregion
+
+        #region Override foreign key deletion behaviour
+        /*
+        modelBuilder.Entity(nameof(DbModels.ReviewDbM), b => //Each review in the review-table
+        {
+            b.HasOne(nameof(DbModels.UserDbM), nameof(UserDbM)) //has one user
+                .WithMany(nameof(UserDbM.ReviewsDbM)) //which has many reviews
+                .HasForeignKey("UserIdDbM") //which has a foreign key
+                .OnDelete(DeleteBehavior.Cascade); //when this foreign key is deleted, delete the review object
+            b.Navigation(nameof(UserDbM));
+        });
+*/
+/*
+        modelBuilder.Entity<ReviewDbM>()
+            .HasOne(review => review.UserDbM) //has one user
+            .WithMany(user => user.ReviewsDbM) //which has many reviews
+            .HasForeignKey(nameof(ReviewDbM.UserDbM)) //which has a foreign key
+            .OnDelete(DeleteBehavior.Cascade); //when this foreign key is deleted, delete the review object
+*/
+/*
+        modelBuilder.Entity(nameof(DbModels.ReviewDbM), b =>
+        {
+            b.HasOne(nameof(DbModels.AttractionDbM), nameof(AttractionDbM))
+                .WithMany(nameof(UserDbM.ReviewsDbM))
+                .HasForeignKey(nameof(ReviewDbM.AttractionDbM))
+                .OnDelete(DeleteBehavior.Cascade); 
+            b.Navigation(nameof(AttractionDbM));
+        });
+
+        modelBuilder.Entity("DbModels.ReviewDbM", b =>
+        {
+            b.HasOne("DbModels.AttractionDbM", "AttractionDbM")
+                .WithMany("ReviewDbM")
+                .HasForeignKey("AttractionId")
+                .OnDelete(DeleteBehavior.Cascade);
+            b.Navigation("AttractionDbM");
+        });
+*/
+        #endregion
         base.OnModelCreating(modelBuilder);
     }
 

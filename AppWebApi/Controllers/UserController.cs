@@ -44,6 +44,31 @@ namespace AppWebApi.Controllers
             }
         }
 
+        //Fetch CuDto template for Update
+        [HttpGet()] 
+        [ActionName(nameof(ReadUserCuDto))]
+        [ProducesResponseType(200, Type = typeof(UserCuDto))]
+        [ProducesResponseType(400, Type = typeof(string))]
+        public async Task<IActionResult> ReadUserCuDto(string id = null)
+        {
+            try
+            {
+                if(id is null) throw new ArgumentException($"User id is required.");
+                
+                var idArg = Guid.Parse(id);
+
+                var response = await _service.ReadUserAsync(idArg, false);
+                if (response is null) throw new ArgumentException($"User with id {id} does not exist.");
+
+                return Ok(new UserCuDto(response.Item));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{nameof(ReadUserCuDto)}: {ex.Message} - {ex.InnerException?.Message}");
+                return BadRequest($"{ex.Message} - {ex.InnerException?.Message}");
+            }
+        }
+
         [HttpDelete()]
         [ActionName(nameof(DeleteUser))]
         [ProducesResponseType(200, Type = typeof(AttractionCuDto))]

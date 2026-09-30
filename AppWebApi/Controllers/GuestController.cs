@@ -45,23 +45,16 @@ namespace AppWebApi.Controllers
             }
         }
 
-        //Fetch CuDto template for Update or Create
+        //Fetch CuDto template for Create
         [HttpGet()] 
         [ActionName(nameof(ReadUserCuDto))]
         [ProducesResponseType(200, Type = typeof(UserCuDto))]
         [ProducesResponseType(400, Type = typeof(string))]
-        public async Task<IActionResult> ReadUserCuDto(string id = null)
+        public async Task<IActionResult> ReadUserCuDto()
         {
             try
             {
-                if(id is null) return Ok(new UserCuDto());
-                
-                var idArg = Guid.Parse(id);
-
-                var response = await _userservice.ReadUserAsync(idArg, false);
-                if (response is null) throw new ArgumentException($"User with id {id} does not exist.");
-
-                return Ok(new UserCuDto(response.Item));
+                return Ok(new UserCuDto());
             }
             catch (Exception ex)
             {

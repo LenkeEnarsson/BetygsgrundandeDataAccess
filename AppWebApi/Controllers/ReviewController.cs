@@ -29,7 +29,7 @@ namespace AppWebApi.Controllers
         [ActionName(nameof(ReadReviewList))]
         [ProducesResponseType(200, Type = typeof(ReviewCuDto))]
         [ProducesResponseType(400, Type = typeof(string))]
-        public async Task<IActionResult> ReadReviewList(bool seeded, bool flat, string filter, int pageNumber, int pageSize = 10)
+        public async Task<IActionResult> ReadReviewList(bool seeded = true, bool flat = false, string filter = null, int pageNumber = 0, int pageSize = 10)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace AppWebApi.Controllers
         {
             try
             {
-                if(id is null) return Ok(new UserCuDto());
+                if(id is null) return Ok(new ReviewCuDto());
 
                 var idArg = Guid.Parse(id);
 

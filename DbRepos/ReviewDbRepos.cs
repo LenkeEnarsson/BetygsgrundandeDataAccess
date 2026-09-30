@@ -36,7 +36,7 @@ public class ReviewDbRepos
         else
         {
             var query = _dbContext.Reviews.AsNoTracking() //No tracking for reading
-                .Include(i => i.AttractionDbM)
+                .Include(i => i.AttractionDbM).ThenInclude(a => a.CityDbM)
                 .Include(i => i.UserDbM)
                 .Where(i => i.ReviewId == id);
 

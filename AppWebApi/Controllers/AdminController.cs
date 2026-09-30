@@ -90,7 +90,7 @@ namespace AppWebApi.Controllers
         }
 
         //GET: api/admin/seed
-        [HttpGet()]
+        [HttpPost()]
         [ActionName("Seed")]
         [ProducesResponseType(200, Type = typeof(string))]
         [ProducesResponseType(400, Type = typeof(string))]
@@ -111,7 +111,7 @@ namespace AppWebApi.Controllers
         }
 
         //GET: api/admin/removeseed
-        [HttpGet()]
+        [HttpDelete()]
         [ActionName("RemoveSeed")]
         [ProducesResponseType(200, Type = typeof(string))]
         [ProducesResponseType(400, Type = typeof(string))]
@@ -122,7 +122,7 @@ namespace AppWebApi.Controllers
                 _logger.LogInformation($"{nameof(Seed)}");
                 var deletedRows = await _service.RemoveSeedAsync(true);
 
-                return Ok($"Seeded items removed successfully\nDeleted rows: {JsonConvert.SerializeObject(deletedRows)}");
+                return Ok(("Seeded items removed successfully", deletedRows));
             }
             catch (Exception ex)
             {

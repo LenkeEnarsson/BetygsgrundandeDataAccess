@@ -93,6 +93,8 @@ namespace AppWebApi.Controllers
         {
             try
             {
+                if(id is null) return Ok(new UserCuDto());
+
                 var idArg = Guid.Parse(id);
 
                 var response = await _service.ReadReviewAsync(idArg, false);

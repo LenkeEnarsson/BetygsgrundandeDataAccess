@@ -47,13 +47,15 @@ namespace AppWebApi.Controllers
 
         //Fetch CuDto template for Update or Create
         [HttpGet()] 
-        [ActionName(nameof(ReadItemCuDto))]
+        [ActionName(nameof(ReadUserCuDto))]
         [ProducesResponseType(200, Type = typeof(UserCuDto))]
         [ProducesResponseType(400, Type = typeof(string))]
-        public async Task<IActionResult> ReadItemCuDto(string id = null)
+        public async Task<IActionResult> ReadUserCuDto(string id = null)
         {
             try
             {
+                if(id is null) return Ok(new UserCuDto());
+                
                 var idArg = Guid.Parse(id);
 
                 var response = await _userservice.ReadUserAsync(idArg, false);
@@ -63,17 +65,17 @@ namespace AppWebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(ReadItemCuDto)}: {ex.Message} - {ex.InnerException?.Message}");
+                _logger.LogError($"{nameof(ReadUserCuDto)}: {ex.Message} - {ex.InnerException?.Message}");
                 return BadRequest($"{ex.Message} - {ex.InnerException?.Message}");
             }
         }
 
         //Add user to database
         [HttpPost()]
-        [ActionName(nameof(SignUp))]
+        [ActionName(nameof(Register))]
         [ProducesResponseType(200, Type = typeof(UserCuDto))]
         [ProducesResponseType(400, Type = typeof(string))]
-        public async Task<IActionResult> SignUp([FromBody] UserCuDto item)
+        public async Task<IActionResult> Register([FromBody] UserCuDto item)
         {
             try
             {
@@ -86,7 +88,7 @@ namespace AppWebApi.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(SignUp)}: {ex.Message} - {ex.InnerException?.Message}");
+                _logger.LogError($"{nameof(Register)}: {ex.Message} - {ex.InnerException?.Message}");
                 return BadRequest($"{ex.Message} - {ex.InnerException?.Message}");
             }
         }

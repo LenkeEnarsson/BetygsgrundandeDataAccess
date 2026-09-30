@@ -112,6 +112,8 @@ namespace AppWebApi.Controllers
         {
             try
             {
+                if(id is null) return Ok(new AttractionCuDto());
+
                 var idArg = Guid.Parse(id);
 
                 var response = await _service.ReadAttractionAsync(idArg, false);

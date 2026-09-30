@@ -23,23 +23,12 @@ GO
 
 -- SP Delete Seed
 CREATE OR ALTER PROCEDURE dbo.spDeleteSeeded
-    @seededParam BIT = 1, --true
+    @seededParam BIT = 1 --true
 
-    @nrAttractionsAffected INT OUTPUT,
-    @nrCitiesAffected INT OUTPUT,
-    @nrCountriesAffected INT OUTPUT,
-    @nrUsersAffected INT OUTPUT,
-    @nrReviewsAffected INT OUTPUT
 AS
 BEGIN TRY
 
     SET NOCOUNT ON;
-
-    SELECT  @nrAttractionsAffected = COUNT(*) FROM suprusr.Attractions WHERE Seeded = @seededParam;
-    SELECT  @nrCitiesAffected = COUNT(*) FROM suprusr.Cities WHERE Seeded = @seededParam;
-    SELECT  @nrCountriesAffected = COUNT(*) FROM suprusr.Countries WHERE Seeded = @seededParam;
-    SELECT  @nrUsersAffected = COUNT(*) FROM dbo.Users WHERE Seeded = @seededParam;
-    SELECT  @nrReviewsAffected = COUNT(*) FROM usr.Reviews WHERE Seeded = @seededParam;
 
     DELETE FROM suprusr.Attractions WHERE Seeded = @seededParam;
     DELETE FROM suprusr.Cities WHERE Seeded = @seededParam;

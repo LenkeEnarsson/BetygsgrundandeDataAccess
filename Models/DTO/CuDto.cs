@@ -149,6 +149,7 @@ public record UserCuDto
     public UserCuDto(IUser org)
     {
         UserId = org.UserId;
+        Username = org.Username;
         Email = org?.Email;
         FirstName = org.FirstName;
         LastName = org.LastName;

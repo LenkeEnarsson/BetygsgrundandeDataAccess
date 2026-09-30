@@ -104,7 +104,7 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool see
                 DbItemsCount = await query
                 //Adding filter functionality
                 .Where(i => (i.Seeded == seeded) &&
-                                  (i.CategoriesDbM.Any(c => c.CatName.ToLower().Contains(filter))
+                                  (i.CategoriesDbM.Any(c => c.CategoryName.ToLower().Contains(filter))
                                 || i.Title.ToLower().Contains(filter) 
                                 || i.Description.ToLower().Contains(filter)
                                 || i.CityDbM.CityName.ToLower().Contains(filter)
@@ -114,7 +114,7 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool see
 
                 //Adding filter functionality
                 .Where(i => (i.Seeded == seeded) &&
-                                  (i.CategoriesDbM.Any(c => c.CatName.ToLower().Contains(filter))
+                                  (i.CategoriesDbM.Any(c => c.CategoryName.ToLower().Contains(filter))
                                 || i.Title.ToLower().Contains(filter) 
                                 || i.Description.ToLower().Contains(filter)
                                 || i.CityDbM.CityName.ToLower().Contains(filter)

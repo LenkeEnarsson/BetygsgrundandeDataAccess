@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DbModels
 {
     [Table("Categories", Schema = "suprusr")]
-    [Index(nameof(CatName))]
+    [Index(nameof(CategoryName))]
     public class CategoryDbM : Category, ISeed<CategoryDbM>
     {
         [Key]
@@ -32,14 +32,14 @@ namespace DbModels
             if(org.CategoryId is not null) CategoryId = (Guid)org.CategoryId;
             else CategoryId = Guid.NewGuid();
 
-            CatName = org.Name;
+            CategoryName = org.Name;
         }
 
         public CategoryDbM UpdateFromDTO(CategoryCuDto org) //Only updating individual proprties, needs navProp for references
         {
             if(org.CategoryId != this.CategoryId) throw new ArgumentException($"Update object and database object does not have the same id.");
             
-            CatName = org.Name;
+            CategoryName = org.Name;
 
             return this;
         }

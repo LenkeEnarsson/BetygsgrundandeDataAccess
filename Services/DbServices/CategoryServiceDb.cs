@@ -26,8 +26,6 @@ public class CategoryServiceDb : ICategoryService
 
     public Task<ResponsePageDto<ICategory>> ReadCategoryListAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
     => _repo.ReadCategoryListAsync(seeded, flat, filter, pageNumber, pageSize);
-    public Task<ResponsePageDto<ICategory>> ReadCategoryListNoReviewsAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
-    => _repo.ReadCategoryListNoReviewsAsync(seeded, flat, filter, pageNumber, pageSize);
     public Task<ResponseItemDto<ICategory>> ReadCategoryAsync(Guid id, bool flat)
     => _repo.ReadCategoryAsync(id, flat);
     public Task<ResponseItemDto<ICategory>> DeleteCategoryAsync(Guid id)

@@ -18,7 +18,7 @@ public class CategoryCuDto
     public CategoryCuDto(ICategory org)
     {
         CategoryId = org.CategoryId;
-        Name = org.CatName;
+        Name = org.CategoryName;
         AttractionIds = org.Attractions?.Select(i => i.AttractionId).ToList();
     }
 

@@ -31,7 +31,7 @@ public interface IAttraction
 public interface ICategory
 {
     public Guid CategoryId { get; set; }
-    public string CatName { get; set; }
+    public string CategoryName { get; set; }
 
     public List<IAttraction> Attractions { get; set; }
 }

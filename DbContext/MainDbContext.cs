@@ -25,16 +25,16 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
 #endif
 
     #region C# model of database tables
-    public DbSet<AttractionDbM> Attractions { get; set; }
-    public DbSet<CategoryDbM> Categories{ get; set; }
-    public DbSet<CityDbM> Cities { get; set; }
-    public DbSet<CountryDbM> Countries{ get; set; }
-    public DbSet<ReviewDbM> Reviews { get; set; }
-    public DbSet<UserDbM> Users { get; set; }
+    public DbSet<AttractionDbM> Attractions => Set<AttractionDbM>();
+    public DbSet<CategoryDbM> Categories => Set<CategoryDbM>();
+    public DbSet<CityDbM> Cities => Set<CityDbM>();
+    public DbSet<CountryDbM> Countries => Set<CountryDbM>();
+    public DbSet<ReviewDbM> Reviews => Set<ReviewDbM>();
+    public DbSet<UserDbM> Users => Set<UserDbM>();
     #endregion
 
     #region Views
-    public DbSet<GstUsrInfoDbDto> VwInfoDb { get; set; }
+    public DbSet<CountRowsInTablesDbDto> VwInfoDb { get; set; }
 
     #endregion
 
@@ -50,46 +50,27 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
     {
         
         #region Model views
-        modelBuilder.Entity<GstUsrInfoDbDto>().ToView(nameof(VwInfoDb), "gstusr").HasNoKey();
+        modelBuilder.Entity<CountRowsInTablesDbDto>().ToView(nameof(VwInfoDb), "gstusr").HasNoKey();
         #endregion
 
         #region Override foreign key deletion behaviour
-        /*
-        modelBuilder.Entity(nameof(DbModels.ReviewDbM), b => //Each review in the review-table
+
+        modelBuilder.Entity<ReviewDbM>( a =>
         {
-            b.HasOne(nameof(DbModels.UserDbM), nameof(UserDbM)) //has one user
-                .WithMany(nameof(UserDbM.ReviewsDbM)) //which has many reviews
-                .HasForeignKey("UserIdDbM") //which has a foreign key
-                .OnDelete(DeleteBehavior.Cascade); //when this foreign key is deleted, delete the review object
-            b.Navigation(nameof(UserDbM));
-        });
-*/
-/*
-        modelBuilder.Entity<ReviewDbM>()
-            .HasOne(review => review.UserDbM) //has one user
-            .WithMany(user => user.ReviewsDbM) //which has many reviews
-            .HasForeignKey(nameof(ReviewDbM.UserDbM)) //which has a foreign key
-            .OnDelete(DeleteBehavior.Cascade); //when this foreign key is deleted, delete the review object
-*/
-/*
-        modelBuilder.Entity(nameof(DbModels.ReviewDbM), b =>
-        {
-            b.HasOne(nameof(DbModels.AttractionDbM), nameof(AttractionDbM))
-                .WithMany(nameof(UserDbM.ReviewsDbM))
-                .HasForeignKey(nameof(ReviewDbM.AttractionDbM))
-                .OnDelete(DeleteBehavior.Cascade); 
-            b.Navigation(nameof(AttractionDbM));
+            a.HasOne(b => b.AttractionDbM)
+                .WithMany(c => c.ReviewsDbM)
+                .HasForeignKey(d => d.AttractionId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
-        modelBuilder.Entity("DbModels.ReviewDbM", b =>
+        modelBuilder.Entity<ReviewDbM>( a =>
         {
-            b.HasOne("DbModels.AttractionDbM", "AttractionDbM")
-                .WithMany("ReviewDbM")
-                .HasForeignKey("AttractionId")
+            a.HasOne(b => b.UserDbM)
+                .WithMany(c => c.ReviewsDbM)
+                .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-            b.Navigation("AttractionDbM");
         });
-*/
+
         #endregion
         base.OnModelCreating(modelBuilder);
     }

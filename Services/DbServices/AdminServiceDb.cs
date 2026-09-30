@@ -25,16 +25,10 @@ public class AdminServiceDb : IAdminService
     #endregion
 
     public Task SeedAsync() => _repo.SeedAsync();
-    public Task RemoveSeedAsync(bool seeded) => _repo.RemoveSeedAsync(seeded);
+    public Task<CountRowsInTablesDbDto> RemoveSeedAsync(bool seeded) => _repo.RemoveSeedAsync(seeded);
     
-    //Guestuser Views
-    public Task<GstUsrInfoDbDto> GuestDbInfoAsync() => _repo.GuestDbInfoAsync();
-    
-    //Handling of users:
-    public Task<ResponseItemDto<IUser>> ReadUserAsync(Guid id, bool flat) => _repo.ReadUserAsync(id, flat);
-    public Task<ResponseItemDto<IUser>> CreateUserAsync(UserCuDto item) => _repo.CreateUserAsync(item);
-    public Task<ResponseItemDto<IUser>> UpdateUserAsync(UserCuDto item) => _repo.UpdateUserAsync(item);
-    public Task<ResponseItemDto<IUser>> DeleteUserAsync(Guid id) => _repo.DeleteUserAsync(id);
+    //Guest Views
+    public Task<CountRowsInTablesDbDto> GuestDbInfoAsync() => _repo.DbCountRowsAsync();
 
 }
 

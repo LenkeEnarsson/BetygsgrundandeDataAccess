@@ -35,6 +35,7 @@ namespace Models
         {
             Seeded = true;
             CityId = Guid.NewGuid();
+            CityName = seeder.FirstName;
 
             return this;
         }

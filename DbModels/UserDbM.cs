@@ -1,17 +1,16 @@
-﻿using models.CuDto;
-using Models;
-using Models.DTO;
-using Seido.Utilities.SeedGenerator;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+
+using Seido.Utilities.SeedGenerator;
+using Models;
+using models.CuDto;
+using Microsoft.EntityFrameworkCore;
 
 namespace DbModels
 {
     [Table("Users", Schema = "dbo")]
+    [Index(nameof(Username))]
     public class UserDbM : User, ISeed<UserDbM>
     {
         [Key] 

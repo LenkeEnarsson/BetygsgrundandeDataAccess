@@ -1,7 +1,5 @@
 ﻿using Seido.Utilities.SeedGenerator;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Newtonsoft.Json;
 
 namespace Models
 {
@@ -9,8 +7,8 @@ namespace Models
     {
         public virtual Guid UserId { get; set; }
         public string Username { get; set; }
-        public string Email {get;set;}
-        public string Password {get;set;}
+        [JsonIgnore]public string Email {get;set;}
+        [JsonIgnore]public string Password {get;set;}
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
@@ -41,6 +39,7 @@ namespace Models
             UserId = Guid.NewGuid();
             FirstName = seeder.FirstName;
             LastName = seeder.LastName;
+            Username = seeder.LatinWords(1)[0];
 
             return this;
         }

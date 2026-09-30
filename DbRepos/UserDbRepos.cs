@@ -62,7 +62,7 @@ public async Task<ResponsePageDto<IUser>> ReadUserListAsync(bool seeded = false,
         else
         {
             query = _dbContext.Users.AsNoTracking()
-                .Include(i => i.ReviewsDbM);
+                .Include(i => i.ReviewsDbM).ThenInclude(i => i.AttractionDbM);
         }
 
         if (string.IsNullOrEmpty(filter))
@@ -73,8 +73,8 @@ public async Task<ResponsePageDto<IUser>> ReadUserListAsync(bool seeded = false,
 #endif
 
                 DbItemsCount = await query
-                //Adding filter functionality
-                .Where(i => (i.Seeded == seeded)).CountAsync(),
+                    .Where(i => (i.Seeded == seeded))
+                    .CountAsync(),
 
                 PageItems = await query
 
@@ -99,14 +99,15 @@ public async Task<ResponsePageDto<IUser>> ReadUserListAsync(bool seeded = false,
 
                 DbItemsCount = await query
                 .Where(i => (i.Seeded == seeded) &&
-                            (i.FirstName.ToLower().Contains(filter) || i.LastName.ToLower().Contains(filter)))
+                            (i.FirstName.ToLower().Contains(filter) 
+                          || i.LastName.ToLower().Contains(filter)))
                 .CountAsync(),
 
                 PageItems = await query
                 .Where(i => (i.Seeded == seeded) &&
-                            (i.FirstName.ToLower().Contains(filter) || i.LastName.ToLower().Contains(filter)))
+                            (i.FirstName.ToLower().Contains(filter) 
+                          || i.LastName.ToLower().Contains(filter)))
 
-                //Paging
                 .Skip(pageNumber * pageSize)
                 .Take(pageSize)
 
@@ -119,7 +120,7 @@ public async Task<ResponsePageDto<IUser>> ReadUserListAsync(bool seeded = false,
 
     public async Task<ResponseItemDto<IUser>> DeleteUserAsync(Guid id)
     {
-        //Find user
+        //Find object
         var query1 = _dbContext.Users
             .Where(i => i.UserId == id);
         var item = await query1.FirstOrDefaultAsync<UserDbM>();
@@ -161,7 +162,7 @@ public async Task<ResponsePageDto<IUser>> ReadUserListAsync(bool seeded = false,
         if (itemDto.UserId != null)
             throw new ArgumentException($"{nameof(itemDto.UserId)} must be null when creating a new object");
 
-        //Update individual properties
+        //Convert properties
         var item = new UserDbM(itemDto);
         await navProp_UserCuDto_to_UserDbM(itemDto, item);
 

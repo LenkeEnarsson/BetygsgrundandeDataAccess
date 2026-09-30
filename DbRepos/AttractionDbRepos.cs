@@ -54,7 +54,7 @@ public class AttractionDbRepos
         };
     }
 
-public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool seeded = false, bool flat = true, string filter = "", int pageNumber = 1, int pageSize = 10)
+public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool seeded = false, bool flat = true, string filter = "", int pageNumber = 0, int pageSize = 10)
     {
          IQueryable<AttractionDbM> query;
         if (flat)
@@ -64,8 +64,8 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool see
         else
         {
             query = _dbContext.Attractions.AsNoTracking()
-                .Include(i => i.CityDbM)
-                .Include(i => i.ReviewsDbM)
+                .Include(i => i.CityDbM).ThenInclude(c => c.CountryDbM)
+                .Include(i => i.ReviewsDbM).ThenInclude(r => r.UserDbM)
                 .Include(i => i.CategoriesDbM);
         }
 
@@ -104,21 +104,21 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListAsync(bool see
                 DbItemsCount = await query
                 //Adding filter functionality
                 .Where(i => (i.Seeded == seeded) &&
-                                  (i.CategoriesDbM.Any(c => c.Name.ToLower().Contains(filter))
+                                  (i.CategoriesDbM.Any(c => c.CatName.ToLower().Contains(filter))
                                 || i.Title.ToLower().Contains(filter) 
                                 || i.Description.ToLower().Contains(filter)
                                 || i.CityDbM.CityName.ToLower().Contains(filter)
-                                || i.CityDbM.CountryDbM.Name.ToLower().Contains(filter))).CountAsync(),
+                                || i.CityDbM.CountryDbM.CountryName.ToLower().Contains(filter))).CountAsync(),
 
                 PageItems = await query
 
                 //Adding filter functionality
                 .Where(i => (i.Seeded == seeded) &&
-                                  (i.CategoriesDbM.Any(c => c.Name.ToLower().Contains(filter))
+                                  (i.CategoriesDbM.Any(c => c.CatName.ToLower().Contains(filter))
                                 || i.Title.ToLower().Contains(filter) 
                                 || i.Description.ToLower().Contains(filter)
                                 || i.CityDbM.CityName.ToLower().Contains(filter)
-                                || i.CityDbM.CountryDbM.Name.ToLower().Contains(filter)))
+                                || i.CityDbM.CountryDbM.CountryName.ToLower().Contains(filter)))
 
                 //Adding paging
                 .Skip(pageNumber * pageSize)
@@ -142,7 +142,8 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListNoReviewsAsync
         {
             query = _dbContext.Attractions.AsNoTracking()
                 .Include(i => i.CityDbM)
-                .Include(i => i.CategoriesDbM);
+                .Include(i => i.CategoriesDbM)
+                .Include(i => i.ReviewsDbM);
         }
 
         if (string.IsNullOrEmpty(filter))
@@ -153,18 +154,15 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListNoReviewsAsync
 #endif
 
                 DbItemsCount = await query
-                //Adding filter functionality
-                .Where(i => (i.Seeded == seeded)).CountAsync(),
+                .Where(i => (i.Seeded == seeded) 
+                    && i.ReviewsDbM.Count == 0)
+                .CountAsync(),
 
                 PageItems = await query
-
-                //Adding filter functionality
-                .Where(i => (i.Seeded == seeded))
-
-                //Adding paging
+                .Where(i => (i.Seeded == seeded) 
+                    && i.ReviewsDbM.Count == 0)
                 .Skip(pageNumber * pageSize)
                 .Take(pageSize)
-
                 .ToListAsync<IAttraction>(),
 
                 PageNr = pageNumber,

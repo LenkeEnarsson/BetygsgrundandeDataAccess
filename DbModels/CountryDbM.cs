@@ -1,12 +1,10 @@
-﻿using models.CuDto;
-using Models;
-using Seido.Utilities.SeedGenerator;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+
+using Seido.Utilities.SeedGenerator;
+using Models;
+using models.CuDto;
 
 namespace DbModels
 {
@@ -32,13 +30,13 @@ namespace DbModels
             if(org.CountryId is not null) CountryId = (Guid)org.CountryId;
             else CountryId = Guid.NewGuid();
 
-            Name = org.Name;
+            CountryName = org.Name;
         }
         public CountryDbM UpdateFromDTO(CountryCuDto org)
         {
             if(org.CountryId != this.CountryId) throw new ArgumentException($"Update object and database object does not have the same id.");
             
-            Name = org.Name;
+            CountryName = org.Name;
 
             return this;
         }

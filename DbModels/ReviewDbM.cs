@@ -5,21 +5,33 @@ using Newtonsoft.Json;
 using Seido.Utilities.SeedGenerator;
 using Models;
 using models.CuDto;
+using Microsoft.EntityFrameworkCore;
 
 namespace DbModels;
 
 [Table("Reviews", Schema = "usr")]
+[Index(nameof(Score))]
+
 public class ReviewDbM : Review, ISeed<ReviewDbM>
 {
     [Key]
     public override Guid ReviewId { get; set; }
+    
     [NotMapped]
-    public override IAttraction Attraction { get => AttractionDbM; set => throw new NotImplementedException(); }
+    public override IAttraction AttractionInterface { get => AttractionDbM; set => throw new NotImplementedException(); }
+    [JsonIgnore]
+    public Guid? AttractionId { get; set; }
     [Required]
+    [JsonIgnore]
     public AttractionDbM AttractionDbM {get;set;}
 
-    [NotMapped] public override IUser UserId{ get => UserDbM; set => throw new NotImplementedException(); }
-    [Required] public UserDbM UserDbM { get; set; }
+    [NotMapped] 
+    public override IUser UserInterface{ get => UserDbM; set => throw new NotImplementedException(); }
+    [JsonIgnore]
+    public Guid? UserId { get; set; }
+    [Required] 
+    [JsonIgnore]
+    public UserDbM UserDbM { get; set; }
 
     public ReviewDbM() {}
     public new ReviewDbM Seed(SeedGenerator seeder)

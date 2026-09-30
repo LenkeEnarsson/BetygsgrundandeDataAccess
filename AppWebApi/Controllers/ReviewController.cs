@@ -65,7 +65,7 @@ namespace AppWebApi.Controllers
             }
         }
 
-        [HttpGet()]
+        [HttpDelete()]
         [ActionName(nameof(DeleteReview))]
         [ProducesResponseType(200, Type = typeof(ReviewCuDto))]
         [ProducesResponseType(400, Type = typeof(string))]
@@ -107,7 +107,7 @@ namespace AppWebApi.Controllers
             }
         }
 
-        [HttpGet()]
+        [HttpPut()]
         [ActionName(nameof(UpdateReview))]
         [ProducesResponseType(200, Type = typeof(ReviewCuDto))]
         [ProducesResponseType(400, Type = typeof(string))]
@@ -130,7 +130,7 @@ namespace AppWebApi.Controllers
             }
         }
 
-        [HttpGet()]
+        [HttpPost()]
         [ActionName(nameof(CreateReview))]
         [ProducesResponseType(200, Type = typeof(ReviewCuDto))]
         [ProducesResponseType(400, Type = typeof(string))]

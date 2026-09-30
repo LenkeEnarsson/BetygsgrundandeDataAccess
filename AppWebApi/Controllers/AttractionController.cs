@@ -28,7 +28,7 @@ namespace AppWebApi.Controllers
         [ActionName(nameof(ReadAttractionList))]
         [ProducesResponseType(200, Type = typeof(AttractionCuDto))]
         [ProducesResponseType(400, Type = typeof(string))]
-        public async Task<IActionResult> ReadAttractionList(bool seeded, bool flat, string filter, int pageNumber, int pageSize = 10)
+        public async Task<IActionResult> ReadAttractionList(bool seeded = true, bool flat = false, string filter = null, int pageNumber = 0, int pageSize = 10)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace AppWebApi.Controllers
             }
         }
 
-        [HttpGet()]
+        [HttpDelete()]
         [ActionName(nameof(DeleteAttraction))]
         [ProducesResponseType(200, Type = typeof(AttractionCuDto))]
         [ProducesResponseType(400, Type = typeof(string))]
@@ -128,7 +128,7 @@ namespace AppWebApi.Controllers
             }
         }
 
-        [HttpGet()]
+        [HttpPut()]
         [ActionName(nameof(UpdateAttraction))]
         [ProducesResponseType(200, Type = typeof(AttractionCuDto))]
         [ProducesResponseType(400, Type = typeof(string))]
@@ -151,7 +151,7 @@ namespace AppWebApi.Controllers
             }
         }
 
-        [HttpGet()]
+        [HttpPost()]
         [ActionName(nameof(CreateAttraction))]
         [ProducesResponseType(200, Type = typeof(AttractionCuDto))]
         [ProducesResponseType(400, Type = typeof(string))]

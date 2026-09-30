@@ -71,6 +71,7 @@ namespace AppWebApi.Controllers
             }
          }
 
+        //GET: api/admin/version
         [HttpGet()]
         [ActionName("Version")]
         [ProducesResponseType(typeof(VersionOptions), 200)]
@@ -87,6 +88,7 @@ namespace AppWebApi.Controllers
                 return BadRequest($"{ex.Message} - {ex.InnerException?.Message}");
             }
         }
+
         //GET: api/admin/seed
         [HttpGet()]
         [ActionName("Seed")]
@@ -118,9 +120,9 @@ namespace AppWebApi.Controllers
             try
             {
                 _logger.LogInformation($"{nameof(Seed)}");
-                await _service.RemoveSeedAsync(true);
+                var deletedRows = await _service.RemoveSeedAsync(true);
 
-                return Ok($"Seeded items removed successfully");
+                return Ok($"Seeded items removed successfully\nDeleted rows: {JsonConvert.SerializeObject(deletedRows)}");
             }
             catch (Exception ex)
             {

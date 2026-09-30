@@ -8,7 +8,7 @@ namespace Models
     public class Country : ICountry, IEquatable<Country>, ISeed<Country>
     {
         public virtual Guid CountryId { get; set; }
-        public string Name { get; set; }
+        public string CountryName { get; set; }
 
         public virtual List<ICity> Cities { get; set; } = [];
 
@@ -17,14 +17,14 @@ namespace Models
         public Country(Country org) //Deepcopy
         {
             CountryId = org.CountryId;
-            Name = org.Name;
+            CountryName = org.CountryName;
 
             foreach (var c in org.Cities)
                 Cities.Add(c);
 
             Seeded = org.Seeded;
         }
-        public bool Equals(Country other) => this.Name == other.Name;
+        public bool Equals(Country other) => this.CountryName == other.CountryName;
         #endregion
 
         #region Seeding
@@ -33,7 +33,7 @@ namespace Models
         {
             Seeded = true;
             CountryId = Guid.NewGuid();
-            Name = seeder.Country;
+            CountryName = seeder.Country;
 
             return this;
         }

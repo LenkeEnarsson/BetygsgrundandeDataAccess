@@ -18,7 +18,7 @@ public class CategoryCuDto
     public CategoryCuDto(ICategory org)
     {
         CategoryId = org.CategoryId;
-        Name = org.Name;
+        Name = org.CatName;
         AttractionIds = org.Attractions?.Select(i => i.AttractionId).ToList();
     }
 
@@ -46,7 +46,7 @@ public class CountryCuDto
     public CountryCuDto(ICountry org)
     {
         CountryId = org.CountryId;
-        Name = org.Name;
+        Name = org.CountryName;
         CityIds = org.Cities?.Select(i => i.CityId).ToList();
     }
 
@@ -193,10 +193,10 @@ public class ReviewCuDto
     public ReviewCuDto(IReview org)
     {
         ReviewId = org.ReviewId;
-        AttractionId = org?.Attraction.AttractionId;
+        AttractionId = org?.AttractionInterface.AttractionId;
         Comment = org.Comment;
         Score = org.Score;
-        AuthorId = org.UserId.UserId;
+        AuthorId = org.UserInterface.UserId;
         DateMade = org.DateMade;
     }
 

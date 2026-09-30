@@ -8,7 +8,7 @@ namespace Models
     public class Category : ICategory, IEquatable<Category>, ISeed<Category>
     {
         public virtual Guid CategoryId { get; set; }
-        public string Name { get; set; }
+        public string CatName { get; set; }
 
         public virtual List<IAttraction> Attractions { get; set; } = [];
 
@@ -18,7 +18,7 @@ namespace Models
         public Category(Category org) //Deepcopy
         {
             CategoryId = org.CategoryId;
-            Name = org.Name;
+            CatName = org.CatName;
 
             foreach (var a in org.Attractions)
                 Attractions.Add(a);
@@ -28,7 +28,7 @@ namespace Models
 
         public bool Equals(Category other)
         {
-            return this.Name.ToLower() == other.Name.ToLower();
+            return this.CatName.ToLower() == other.CatName.ToLower();
         }
         #endregion
 
@@ -38,7 +38,7 @@ namespace Models
         {
             Seeded = true;
             CategoryId = Guid.NewGuid();
-            Name = seeder.FromString("Accommodation, Activity, Adventure Sports, Antique Shop, Aquarium, Architectural Landmark, Art Gallery, Art Museum, Artisan Market, Bakery, Bar, Beach, Bed & Breakfast, Botanical Garden, Boutique Hotel, Brewery, Bridge, Campsite, Castle, Cave, Cavern, City Park, Coastline, Concert Hall, Cultural Center, Dessert Shop, Distillery, Escape Room, Flea Market, Food Hall, Food Market, Fortress, Gaming Center, Garden, Guided Tour, Heritage Center, Hiking Trail, Historical Museum, Historic Site, Hostel, Hot Spring, Hotel, Ice Cream Parlor, Lake, Local Market, Memorial, Monument, Mosque, Museum, National Park, Nature Reserve, Night Market, Observation Deck, Opera House, Palace, Performing Arts Venue, Plaza, Pub, Religious Site, Resort, Restaurant, River, RV Park, Science Museum, Sculpture Park, Shopping Mall, Shrine, Ski Resort, Souvenir Shop, Spa, Speakeasy, Specialized Museum, Sports Stadium, Square, State Park, Statue, Temple, Theater, Theme Park, Tour Operator, Trekking Trail, Viewpoint, Water Park, Water Sports, Waterfall, Wellness Center, Wildlife Sanctuary, Winery, Winter Sports, Zoo");
+            CatName = seeder.FromString("Accommodation, Activity, Adventure Sports, Antique Shop, Aquarium, Architectural Landmark, Art Gallery, Art Museum, Artisan Market, Bakery, Bar, Beach, Bed & Breakfast, Botanical Garden, Boutique Hotel, Brewery, Bridge, Campsite, Castle, Cave, Cavern, City Park, Coastline, Concert Hall, Cultural Center, Dessert Shop, Distillery, Escape Room, Flea Market, Food Hall, Food Market, Fortress, Gaming Center, Garden, Guided Tour, Heritage Center, Hiking Trail, Historical Museum, Historic Site, Hostel, Hot Spring, Hotel, Ice Cream Parlor, Lake, Local Market, Memorial, Monument, Mosque, Museum, National Park, Nature Reserve, Night Market, Observation Deck, Opera House, Palace, Performing Arts Venue, Plaza, Pub, Religious Site, Resort, Restaurant, River, RV Park, Science Museum, Sculpture Park, Shopping Mall, Shrine, Ski Resort, Souvenir Shop, Spa, Speakeasy, Specialized Museum, Sports Stadium, Square, State Park, Statue, Temple, Theater, Theme Park, Tour Operator, Trekking Trail, Viewpoint, Water Park, Water Sports, Waterfall, Wellness Center, Wildlife Sanctuary, Winery, Winter Sports, Zoo");
 
             return this;
         }

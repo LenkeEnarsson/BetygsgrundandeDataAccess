@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using Newtonsoft.Json;
-
-    using Seido.Utilities.SeedGenerator;
-    using Models;
+using Seido.Utilities.SeedGenerator;
+using Models;
 using models.CuDto;
+using Microsoft.EntityFrameworkCore;
 
 namespace DbModels
 {
     [Table("Categories", Schema = "suprusr")]
+    [Index(nameof(CatName))]
     public class CategoryDbM : Category, ISeed<CategoryDbM>
     {
         [Key]
@@ -34,14 +32,14 @@ namespace DbModels
             if(org.CategoryId is not null) CategoryId = (Guid)org.CategoryId;
             else CategoryId = Guid.NewGuid();
 
-            Name = org.Name;
+            CatName = org.Name;
         }
 
         public CategoryDbM UpdateFromDTO(CategoryCuDto org) //Only updating individual proprties, needs navProp for references
         {
             if(org.CategoryId != this.CategoryId) throw new ArgumentException($"Update object and database object does not have the same id.");
             
-            Name = org.Name;
+            CatName = org.Name;
 
             return this;
         }

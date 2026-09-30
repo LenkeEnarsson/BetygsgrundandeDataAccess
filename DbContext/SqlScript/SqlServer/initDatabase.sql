@@ -12,8 +12,8 @@ GO
 --View for database info shown to guest
 CREATE OR ALTER VIEW gstusr.vwInfoDb AS
     SELECT (SELECT COUNT(*) FROM dbo.Users) as nrUsers, 
-        (SELECT COUNT(*) FROM suprusr.Attractions a JOIN usr.Reviews r ON a.AttractionId = r.AttractionDbMAttractionId) as nrAttractionsWithReviews,
-        (SELECT COUNT(*) FROM suprusr.Attractions a FULL OUTER JOIN usr.Reviews r ON a.AttractionId = r.AttractionDbMAttractionId WHERE r.AttractionDbMAttractionId IS NULL) as nrAttractionsWithoutReviews,
+        (SELECT COUNT(*) FROM suprusr.Attractions a JOIN usr.Reviews r ON a.AttractionId = r.AttractionId) as nrAttractionsWithReviews,
+        (SELECT COUNT(*) FROM suprusr.Attractions a FULL OUTER JOIN usr.Reviews r ON a.AttractionId = r.AttractionId WHERE r.AttractionId IS NULL) as nrAttractionsWithoutReviews,
         (SELECT COUNT(*) FROM suprusr.Attractions) as nrTotalAttractions,
         (SELECT COUNT(*) FROM suprusr.Categories) as nrCategories, 
         (SELECT COUNT(*) FROM suprusr.Countries) as nrCountries,

@@ -3,7 +3,7 @@ namespace Models;
 public interface ICountry
 {
     public Guid CountryId { get; set; }
-    public string Name { get; set; }
+    public string CountryName { get; set; }
 
     public List<ICity> Cities { get; set; }
 }
@@ -31,7 +31,7 @@ public interface IAttraction
 public interface ICategory
 {
     public Guid CategoryId { get; set; }
-    public string Name { get; set; }
+    public string CatName { get; set; }
 
     public List<IAttraction> Attractions { get; set; }
 }
@@ -39,10 +39,10 @@ public interface ICategory
 public interface IReview
 {
     public Guid ReviewId { get; set; }
-    public IAttraction Attraction { get; set; }
+    public IAttraction AttractionInterface { get; set; }
     public string Comment { get; set; }
     public byte Score { get; set; }
-    public IUser UserId { get; set; }
+    public IUser UserInterface { get; set; }
     public DateTime DateMade { get; set; }
 
 }

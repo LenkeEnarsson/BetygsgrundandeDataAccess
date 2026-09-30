@@ -5,17 +5,23 @@ using Newtonsoft.Json;
 using Seido.Utilities.SeedGenerator;
 using Models;
 using models.CuDto;
+using Microsoft.EntityFrameworkCore;
 
 namespace DbModels;
 
 [Table("Attractions", Schema = "suprusr")]
+[Index(nameof(Title))]
+[Index(nameof(CityId), nameof(Title))]
 public class AttractionDbM : Attraction, ISeed<AttractionDbM>
 {
     [Key] 
     public override Guid AttractionId { get; set; }
     [NotMapped]
     public override ICity City { get => CityDbM; set => throw new NotImplementedException(); } 
+    public Guid CityId { get; set; }
     [Required]
+    [JsonIgnore]
+    [ForeignKey(nameof(CityId))]
     public CityDbM CityDbM { get; set; }
     [NotMapped]
     public override List<IReview> Reviews { get => ReviewsDbM?.ToList<IReview>(); set => throw new NotImplementedException(); } 

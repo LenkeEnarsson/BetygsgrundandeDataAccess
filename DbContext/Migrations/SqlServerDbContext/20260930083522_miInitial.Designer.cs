@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbContext.Migrations.SqlServerDbContext
 {
     [DbContext(typeof(MainDbContext.SqlServerDbContext))]
-    [Migration("20260923125046_miInitial")]
+    [Migration("20260930083522_miInitial")]
     partial class miInitial
     {
         /// <inheritdoc />
@@ -46,7 +46,7 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CityDbMCityId")
+                    b.Property<Guid>("CityId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -60,7 +60,9 @@ namespace DbContext.Migrations.SqlServerDbContext
 
                     b.HasKey("AttractionId");
 
-                    b.HasIndex("CityDbMCityId");
+                    b.HasIndex("Title");
+
+                    b.HasIndex("CityId", "Title");
 
                     b.ToTable("Attractions", "suprusr");
                 });
@@ -71,13 +73,15 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("CatName")
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<bool>("Seeded")
                         .HasColumnType("bit");
 
                     b.HasKey("CategoryId");
+
+                    b.HasIndex("CatName");
 
                     b.ToTable("Categories", "suprusr");
                 });
@@ -99,6 +103,8 @@ namespace DbContext.Migrations.SqlServerDbContext
 
                     b.HasKey("CityId");
 
+                    b.HasIndex("CityName");
+
                     b.HasIndex("CountryDbMCountryId");
 
                     b.ToTable("Cities", "suprusr");
@@ -110,7 +116,7 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("CountryName")
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<bool>("Seeded")
@@ -127,7 +133,7 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AttractionDbMAttractionId")
+                    b.Property<Guid?>("AttractionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comment")
@@ -142,14 +148,16 @@ namespace DbContext.Migrations.SqlServerDbContext
                     b.Property<bool>("Seeded")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("UserDbMUserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ReviewId");
 
-                    b.HasIndex("AttractionDbMAttractionId");
+                    b.HasIndex("AttractionId");
 
-                    b.HasIndex("UserDbMUserId");
+                    b.HasIndex("Score");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Reviews", "usr");
                 });
@@ -180,10 +188,12 @@ namespace DbContext.Migrations.SqlServerDbContext
 
                     b.HasKey("UserId");
 
+                    b.HasIndex("Username");
+
                     b.ToTable("Users", "dbo");
                 });
 
-            modelBuilder.Entity("Models.DTO.GstUsrInfoDbDto", b =>
+            modelBuilder.Entity("Models.DTO.CountRowsInTablesDbDto", b =>
                 {
                     b.Property<int>("NrAttractionsWithReviews")
                         .HasColumnType("int");
@@ -233,7 +243,7 @@ namespace DbContext.Migrations.SqlServerDbContext
                 {
                     b.HasOne("DbModels.CityDbM", "CityDbM")
                         .WithMany("AttractionsDbM")
-                        .HasForeignKey("CityDbMCityId")
+                        .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -255,13 +265,13 @@ namespace DbContext.Migrations.SqlServerDbContext
                 {
                     b.HasOne("DbModels.AttractionDbM", "AttractionDbM")
                         .WithMany("ReviewsDbM")
-                        .HasForeignKey("AttractionDbMAttractionId")
+                        .HasForeignKey("AttractionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DbModels.UserDbM", "UserDbM")
                         .WithMany("ReviewsDbM")
-                        .HasForeignKey("UserDbMUserId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

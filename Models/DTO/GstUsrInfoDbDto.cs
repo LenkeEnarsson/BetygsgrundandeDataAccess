@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Models.DTO
 {
-    public class GstUsrInfoDbDto
+    public class CountRowsInTablesDbDto
     {
         public int NrUsers { get; set; }
         public int NrAttractionsWithReviews { get; set; }

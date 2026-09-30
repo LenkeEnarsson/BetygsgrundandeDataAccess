@@ -6,10 +6,10 @@ namespace Models;
 public class Review : IReview, IEquatable<Review>, ISeed<Review>
 {
     public virtual Guid ReviewId { get; set; }
-    public virtual IAttraction Attraction { get; set; }
+    public virtual IAttraction AttractionInterface { get; set; }
     public string Comment { get; set; }
     public byte Score { get; set; }
-    public virtual IUser UserId { get; set; }
+    public virtual IUser UserInterface { get; set; }
     public DateTime DateMade { get; set; }
 
     #region Constructors & Equals
@@ -17,15 +17,15 @@ public class Review : IReview, IEquatable<Review>, ISeed<Review>
     public Review(Review org) //Deepcopy
     {
         ReviewId = org.ReviewId;
-        Attraction = org.Attraction;
+        AttractionInterface = org.AttractionInterface;
         Comment = org.Comment;
         Score = org.Score;
-        UserId = org.UserId;
+        UserInterface = org.UserInterface;
         DateMade = org.DateMade;
 
         Seeded = org.Seeded;
     }
-    public bool Equals(Review other) => (this.Attraction, this.Comment, this.Score, this.UserId) == (other.Attraction, other.Comment, other.Score, other.UserId);
+    public bool Equals(Review other) => (this.AttractionInterface, this.Comment, this.Score, this.UserInterface) == (other.AttractionInterface, other.Comment, other.Score, other.UserInterface);
     #endregion
 
     #region Seeding

@@ -58,6 +58,7 @@ builder.Services.AddScoped<AdminDbRepos>();
 builder.Services.AddScoped<UserDbRepos>();
 builder.Services.AddScoped<CountryDbRepos>();
 builder.Services.AddScoped<CityDbRepos>();
+builder.Services.AddScoped<CategoryDbRepos>();
 builder.Services.AddScoped<AttractionDbRepos>();
 builder.Services.AddScoped<ReviewDbRepos>();
 
@@ -65,6 +66,7 @@ builder.Services.AddScoped<IAdminService, AdminServiceDb>();
 builder.Services.AddScoped<IUserService, UserServiceDb>();
 builder.Services.AddScoped<ICountryService, CountryServiceDb>();
 builder.Services.AddScoped<ICityService, CityServiceDb>();
+builder.Services.AddScoped<ICategoryService, CategoryServiceDb>();
 builder.Services.AddScoped<IAttractionService, AttractionServiceDb>();
 builder.Services.AddScoped<IReviewService, ReviewServiceDb>();
 #endregion

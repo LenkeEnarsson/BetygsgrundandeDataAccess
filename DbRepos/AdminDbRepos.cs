@@ -49,6 +49,11 @@ public class AdminDbRepos
             r.UserDbM = users[rnd.Next(users.Count)];
         }
 
+        //Remove reviews from some attractions to guarantee attractions without reviews.
+        var nr = seeder.Next((int)attractions.Count/3);
+        for(int i = 0; i < nr; i++)
+            attractions[i].ReviewsDbM = null;
+
         foreach (var u in users)
             u.ReviewsDbM = reviews
                 .Where(r => r.UserDbM.UserId == u.UserId)

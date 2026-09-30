@@ -48,12 +48,12 @@ namespace AppWebApi.Controllers
         [ActionName(nameof(ReadAttractionListNoReviews))]
         [ProducesResponseType(200, Type = typeof(AttractionCuDto))]
         [ProducesResponseType(400, Type = typeof(string))]
-        public async Task<IActionResult> ReadAttractionListNoReviews(bool seeded, bool flat, string filter, int pageNumber, int pageSize = 10)
+        public async Task<IActionResult> ReadAttractionListNoReviews(bool seeded = true, bool flat = false, string filter = null, int pageNumber = 0, int pageSize = 10)
         {
             try
             {
                 var response = await _service.ReadAttractionListNoReviewsAsync(seeded, flat, filter, pageNumber, pageSize);
-                if (response is null) throw new ArgumentException($"No attractions without reviews exist in the database.");
+                if (response.PageItems.Count == 0) throw new ArgumentException($"No attractions without reviews exist in the database.");
 
                 return Ok(response);
             }
@@ -68,7 +68,7 @@ namespace AppWebApi.Controllers
         [ActionName(nameof(ReadAttraction))]
         [ProducesResponseType(200, Type = typeof(AttractionCuDto))]
         [ProducesResponseType(400, Type = typeof(string))]
-        public async Task<IActionResult> ReadAttraction(Guid id, bool flat = true)
+        public async Task<IActionResult> ReadAttraction(Guid id, bool flat = false)
         {
             try
             {

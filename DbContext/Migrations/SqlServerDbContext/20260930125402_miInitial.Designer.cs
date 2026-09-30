@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbContext.Migrations.SqlServerDbContext
 {
     [DbContext(typeof(MainDbContext.SqlServerDbContext))]
-    [Migration("20260930110909_miInitial")]
+    [Migration("20260930125402_miInitial")]
     partial class miInitial
     {
         /// <inheritdoc />
@@ -73,7 +73,7 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CatName")
+                    b.Property<string>("CategoryName")
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<bool>("Seeded")
@@ -81,7 +81,7 @@ namespace DbContext.Migrations.SqlServerDbContext
 
                     b.HasKey("CategoryId");
 
-                    b.HasIndex("CatName");
+                    b.HasIndex("CategoryName");
 
                     b.ToTable("Categories", "suprusr");
                 });

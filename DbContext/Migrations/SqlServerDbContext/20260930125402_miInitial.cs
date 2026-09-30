@@ -26,7 +26,7 @@ namespace DbContext.Migrations.SqlServerDbContext
                 columns: table => new
                 {
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CatName = table.Column<string>(type: "nvarchar(200)", nullable: true),
+                    CategoryName = table.Column<string>(type: "nvarchar(200)", nullable: true),
                     Seeded = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -189,10 +189,10 @@ namespace DbContext.Migrations.SqlServerDbContext
                 column: "Title");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_CatName",
+                name: "IX_Categories_CategoryName",
                 schema: "suprusr",
                 table: "Categories",
-                column: "CatName");
+                column: "CategoryName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cities_CityName",

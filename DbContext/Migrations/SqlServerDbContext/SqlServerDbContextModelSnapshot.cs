@@ -70,7 +70,7 @@ namespace DbContext.Migrations.SqlServerDbContext
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CatName")
+                    b.Property<string>("CategoryName")
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<bool>("Seeded")
@@ -78,7 +78,7 @@ namespace DbContext.Migrations.SqlServerDbContext
 
                     b.HasKey("CategoryId");
 
-                    b.HasIndex("CatName");
+                    b.HasIndex("CategoryName");
 
                     b.ToTable("Categories", "suprusr");
                 });

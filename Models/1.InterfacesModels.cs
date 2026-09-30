@@ -39,10 +39,10 @@ public interface ICategory
 public interface IReview
 {
     public Guid ReviewId { get; set; }
-    public IAttraction AttractionInterface { get; set; }
+    public IAttraction Attraction { get; set; }
     public string Comment { get; set; }
     public byte Score { get; set; }
-    public IUser UserInterface { get; set; }
+    public IUser Author { get; set; }
     public DateTime DateMade { get; set; }
 
 }

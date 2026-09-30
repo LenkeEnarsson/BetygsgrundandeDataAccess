@@ -36,8 +36,8 @@ public class AttractionDbRepos
         else
         {
             var query = _dbContext.Attractions.AsNoTracking() //No tracking for reading
-                .Include(i => i.CityDbM)
-                .Include(i => i.ReviewsDbM)
+                .Include(i => i.CityDbM).ThenInclude(c => c.CountryDbM)
+                .Include(i => i.ReviewsDbM).ThenInclude(r => r.UserDbM)
                 .Include(i => i.CategoriesDbM)
                 .Where(i => i.AttractionId == id);
 
@@ -245,22 +245,30 @@ public async Task<ResponsePageDto<IAttraction>> ReadAttractionListNoReviewsAsync
     
     public async Task<ResponseItemDto<IAttraction>> UpdateAttractionAsync(AttractionCuDto itemDto)
     {
-        if (itemDto.AttractionId != null)
-            throw new ArgumentException($"{nameof(itemDto.AttractionId)} must be null when creating a new object");
+        if (itemDto.AttractionId is null)
+            throw new ArgumentException($"{nameof(itemDto.AttractionId)} is null.");
 
-        //Update individual properties Attraction
-        var item = new AttractionDbM(itemDto);
+        //Find object in database with nav props
+        var query = _dbContext.Attractions
+            .Where(i => i.AttractionId == itemDto.AttractionId);
+        var item = await query
+                .Include(i => i.CityDbM)
+                .Include(i => i.ReviewsDbM)
+                .Include(i => i.CategoriesDbM)
+                .Where(i => i.AttractionId == (Guid)itemDto.AttractionId)
+            .FirstOrDefaultAsync<AttractionDbM>();
 
-        //Update navigation properties
+        if (item == null) throw new ArgumentException($"Item {itemDto.AttractionId} does not exist");
+
+        //Update
+        item.UpdateFromDTO(itemDto);
         await navProp_AttractionCuDto_to_AttractionDbM(itemDto, item);
 
-        //Note changes in DbContext
-        _dbContext.Attractions.Add(item);
-
-        //write to database
+        //Note change and save
+        _dbContext.Attractions.Update(item);
         await _dbContext.SaveChangesAsync();
 
-        //return the updated database item in non-flat mode
+        //Return updated DbM
         return await ReadAttractionAsync(item.AttractionId, false);
     }
 

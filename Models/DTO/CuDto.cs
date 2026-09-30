@@ -27,7 +27,7 @@ public class CategoryCuDto
         if (string.IsNullOrEmpty(Name) || Name.Length > 200)
             throw new ArgumentException("Name must contain 1-200 characters.");
         
-        if (!string.IsNullOrEmpty(Name) && !Regex.IsMatch(Name, @"^[a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s´`'\.\-]{1,50}$"))
+        if (!string.IsNullOrEmpty(Name) && !Regex.IsMatch(Name, @"^[a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s´`'\.\,\-]{1,1000}$"))
             throw new ArgumentException("Name may only contain latin letters, numbers (0-9), ´`'.- and spaces.");
     }
 }
@@ -55,7 +55,7 @@ public class CountryCuDto
         if (string.IsNullOrEmpty(Name) || Name.Length > 200)
             throw new ArgumentException("Name must contain 1-200 characters.");
         
-        if (!string.IsNullOrEmpty(Name) && !Regex.IsMatch(Name, @"^[a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s´`'\.\-]{1,50}$"))
+        if (!string.IsNullOrEmpty(Name) && !Regex.IsMatch(Name, @"^[a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s´`'\.\,\-]{1,1000}$"))
             throw new ArgumentException("Name may only contain latin letters, numbers (0-9), ´`'.- and spaces.");
     }
 }
@@ -84,7 +84,7 @@ public class CityCuDto
         if (string.IsNullOrEmpty(Name) || Name.Length > 200)
             throw new ArgumentException("Name must contain 1-200 characters.");
         
-        if (!string.IsNullOrEmpty(Name) && !Regex.IsMatch(Name, @"^[a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s´`'\.\-]{1,50}$"))
+        if (!string.IsNullOrEmpty(Name) && !Regex.IsMatch(Name, @"^[a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s´`'\.\,\-]{1,1000}$"))
             throw new ArgumentException("Name may only contain latin letters, numbers (0-9), ´`'.- and spaces.");
     }
 }
@@ -120,10 +120,10 @@ public class AttractionCuDto
         if (string.IsNullOrEmpty(Name) || Name.Length > 200 || string.IsNullOrEmpty(Description) || Description.Length > 200)
             throw new ArgumentException("Name and Description must contain 1-200 characters.");
        
-        if (!string.IsNullOrEmpty(Name) && !Regex.IsMatch(Name, @"^[a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s´`'\.\-]{1,50}$"))
+        if (!string.IsNullOrEmpty(Name) && !Regex.IsMatch(Name, @"^[a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s´`'\.\,\-]{1,1000}$"))
             throw new ArgumentException("Name may only contain latin letters, numbers (0-9), ´`'.- and spaces.");
 
-        if (!string.IsNullOrEmpty(Description) && !Regex.IsMatch(Description, @"^[a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s´`'\.\-]{1,50}$"))
+        if (!string.IsNullOrEmpty(Description) && !Regex.IsMatch(Description, @"^[a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s´`'\.\,\-]{1,1000}$"))
             throw new ArgumentException("Description may only contain latin letters, numbers (0-9), ´`'.- and spaces.");
     }
 
@@ -170,8 +170,8 @@ public record UserCuDto
             throw new ArgumentException("Invalid email.");
        
         if (!string.IsNullOrEmpty(FirstName) && !string.IsNullOrEmpty(FirstName)
-        && !Regex.IsMatch(FirstName, @"^[a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s´`'\.\-]{1,50}$")
-        || !Regex.IsMatch(LastName, @"^[a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s´`'\.\-]{1,50}$"))
+        && !Regex.IsMatch(FirstName, @"^[a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s´`'\.\,\-]{1,1000}$")
+        || !Regex.IsMatch(LastName, @"^[a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s´`'\.\,\-]{1,1000}$"))
             throw new ArgumentException("Name may only contain latin letters, numbers (0-9), ´`'.- and spaces.");
 
     }
@@ -194,10 +194,10 @@ public class ReviewCuDto
     public ReviewCuDto(IReview org)
     {
         ReviewId = org.ReviewId;
-        AttractionId = org?.AttractionInterface.AttractionId;
+        AttractionId = org?.Attraction.AttractionId;
         Comment = org.Comment;
         Score = org.Score;
-        AuthorId = org.UserInterface.UserId;
+        AuthorId = org.Author.UserId;
         DateMade = org.DateMade;
     }
 
@@ -209,7 +209,7 @@ public class ReviewCuDto
         if (string.IsNullOrEmpty(Comment) || Comment.Length > 1000 || Score is null || Score <1 || Score >5)
             throw new ArgumentException("Comment must contain 1-1000 characters. Score must be 1-5");
        
-        if (!string.IsNullOrEmpty(Comment) && !Regex.IsMatch(Comment, @"^[a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s´`'\.\-]{1,50}$"))
-            throw new ArgumentException("Comment may only contain latin letters, numbers (0-9), ´`'.- and spaces.");
+        if (!string.IsNullOrEmpty(Comment) && !Regex.IsMatch(Comment, @"^[a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF\s´`'\.\,\-]{1,1000}$"))
+            throw new ArgumentException("Comment may only contain latin letters, numbers (0-9), ´`'.,- and spaces.");
     }
 }

@@ -8,7 +8,7 @@ public class CategoryCuDto
 {
     public Guid? CategoryId {get; set;}
     public string Name { get; set; }
-    public virtual List<Guid> AttractionIds { get; set; } = null;
+    public virtual List<Guid> AttractionsId { get; set; } = null;
 
 #if DEBUG
         public string ConnectionString { get; init; }
@@ -19,7 +19,7 @@ public class CategoryCuDto
     {
         CategoryId = org.CategoryId;
         Name = org.CategoryName;
-        AttractionIds = org.Attractions?.Select(i => i.AttractionId).ToList();
+        AttractionsId = org.Attractions?.Select(i => i.AttractionId).ToList();
     }
 
     public void EnsureValidity()
@@ -36,7 +36,7 @@ public class CountryCuDto
 {
     public Guid? CountryId {get; set;}
     public string Name { get; set; }
-    public virtual List<Guid> CityIds { get; set; } = null;
+    public virtual List<Guid> CitiesId { get; set; } = null;
 
 #if DEBUG
         public string ConnectionString { get; init; }
@@ -47,7 +47,7 @@ public class CountryCuDto
     {
         CountryId = org.CountryId;
         Name = org.CountryName;
-        CityIds = org.Cities?.Select(i => i.CityId).ToList();
+        CitiesId = org.Cities?.Select(i => i.CityId).ToList();
     }
 
     public void EnsureValidity()
@@ -65,7 +65,7 @@ public class CityCuDto
     public Guid? CityId {get; set;}
     public string Name { get; set; }
     public Guid? CountryId { get; set;}
-    public virtual List<Guid> AttractionIds { get; set; } = null;
+    public virtual List<Guid> AttractionsId { get; set; } = null;
 
 #if DEBUG
         public string ConnectionString { get; init; }
@@ -76,7 +76,8 @@ public class CityCuDto
     {
         CityId = org.CityId;
         Name = org.CityName;
-        AttractionIds = org.Attractions?.Select(i => i.AttractionId).ToList();
+        CountryId = org.Country?.CountryId;
+        AttractionsId = org.Attractions?.Select(i => i.AttractionId).ToList();
     }
 
     public void EnsureValidity()

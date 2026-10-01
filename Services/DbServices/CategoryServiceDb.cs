@@ -7,18 +7,18 @@ using models.CuDto;
 
 namespace Services;
 
-public class CategoryServiceDb : IAttractionPropertyService
+public class CategoryServiceDb : ICategoryService
 {
     #region fields & constructors
-    private readonly AttractionPropertyDbRepos _repo = null;
+    private readonly CategoryDbRepos _repo = null;
     private readonly ILogger<CategoryServiceDb> _logger = null;
 
 
-    public CategoryServiceDb(AttractionPropertyDbRepos repo)
+    public CategoryServiceDb(CategoryDbRepos repo)
     {
         _repo = repo;
     }
-    public CategoryServiceDb(AttractionPropertyDbRepos repo, ILogger<CategoryServiceDb> logger):this(repo)
+    public CategoryServiceDb(CategoryDbRepos repo, ILogger<CategoryServiceDb> logger):this(repo)
     {
         _logger = logger;
     }
@@ -26,11 +26,13 @@ public class CategoryServiceDb : IAttractionPropertyService
 
     public Task<ResponsePageDto<ICategory>> ReadCategoryListAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
     => _repo.ReadCategoryListAsync(seeded, flat, filter, pageNumber, pageSize);
-
-    public Task<ResponsePageDto<ICity>> ReadCityListAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
-    => _repo.ReadCityListAsync(seeded, flat, filter, pageNumber, pageSize);
-    
-    public Task<ResponsePageDto<ICountry>> ReadCountryListAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
-    => _repo.ReadCountryListAsync(seeded, flat, filter, pageNumber, pageSize);
+    public Task<ResponseItemDto<ICategory>> ReadCategoryAsync(Guid id, bool flat)
+    => _repo.ReadCategoryAsync(id, flat);
+    public Task<ResponseItemDto<ICategory>> DeleteCategoryAsync(Guid id)
+    => _repo.DeleteCategoryAsync(id);
+    public Task<ResponseItemDto<ICategory>> CreateCategoryAsync(CategoryCuDto item)
+    => _repo.CreateCategoryAsync(item);
+    public Task<ResponseItemDto<ICategory>> UpdateCategoryAsync(CategoryCuDto item)
+    => _repo.UpdateCategoryAsync(item);
 }
 

@@ -10,8 +10,6 @@
 
 # example:
 # .\database-rebuild-all.ps1 sql-attractions sqlserver docker root ..\AppWebApi
-# .\database-rebuild-all.ps1 sql-attractions sqlserver docker dbo ..\AppRazor
-# .\database-rebuild-all.ps1 sql-attractions sqlserver docker dbo ..\AppMvc
 
 param(
     [Parameter(Mandatory=$true)]
@@ -71,5 +69,4 @@ $env:EFC_AppSettingsFolder = $AppSettingsFolder
 dotnet ef database update -c $DBContext -p ../DbContext -s ../DbContext
 
 #to initialize the database you need to run the sql scripts
-# ../DbContext/SqlScripts/SqlServer/initDatabase.sql
-
+#..\.DbContext\SqlScript\SqlServer\initDatabase.sql

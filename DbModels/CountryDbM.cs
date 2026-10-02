@@ -5,10 +5,12 @@ using Newtonsoft.Json;
 using Seido.Utilities.SeedGenerator;
 using Models;
 using models.CuDto;
+using Microsoft.EntityFrameworkCore;
 
 namespace DbModels
 {
     [Table("Countries", Schema = "suprusr")]
+    [Index(nameof(CountryName))]
     public class CountryDbM : Country, ISeed<CountryDbM>
     {
         [Key] 

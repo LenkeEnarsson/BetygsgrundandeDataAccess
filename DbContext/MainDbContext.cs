@@ -55,6 +55,7 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
 
         #region Override foreign key deletion behaviour
 
+        //Delete attraction, cascade delete on review
         modelBuilder.Entity<ReviewDbM>( a =>
         {
             a.HasOne(b => b.AttractionDbM)
@@ -63,6 +64,7 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
+        //Delete user, cascade delete on review
         modelBuilder.Entity<ReviewDbM>( a =>
         {
             a.HasOne(b => b.UserDbM)

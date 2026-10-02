@@ -18,6 +18,7 @@ public class AttractionDbM : Attraction, ISeed<AttractionDbM>
     public override Guid AttractionId { get; set; }
     [NotMapped]
     public override ICity City { get => CityDbM; set => throw new NotImplementedException(); } 
+    [JsonIgnore]
     public Guid CityId { get; set; }
     [Required]
     [JsonIgnore]

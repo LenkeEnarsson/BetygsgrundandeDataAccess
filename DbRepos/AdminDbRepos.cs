@@ -37,9 +37,9 @@ public class AdminDbRepos
         var categories = seeder.ItemsToList<CategoryDbM>(50);
         var countries = seeder.ItemsToList<CountryDbM>(10);
         var cities = seeder.ItemsToList<CityDbM>(101);
-        var attractions = seeder.ItemsToList<AttractionDbM>(10);//TODO: 1000
+        var attractions = seeder.ItemsToList<AttractionDbM>(1000);
         var users = seeder.ItemsToList<UserDbM>(51);
-        var reviews = seeder.ItemsToList<ReviewDbM>(30); //TODO: 300
+        var reviews = seeder.ItemsToList<ReviewDbM>(300);
 
         #region Add foreign key relations
 

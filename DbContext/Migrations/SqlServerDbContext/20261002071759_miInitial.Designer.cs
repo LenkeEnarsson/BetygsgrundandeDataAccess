@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DbContext.Migrations.SqlServerDbContext
 {
     [DbContext(typeof(MainDbContext.SqlServerDbContext))]
-    [Migration("20260930125402_miInitial")]
+    [Migration("20261002071759_miInitial")]
     partial class miInitial
     {
         /// <inheritdoc />
@@ -27,15 +27,15 @@ namespace DbContext.Migrations.SqlServerDbContext
 
             modelBuilder.Entity("AttractionDbMCategoryDbM", b =>
                 {
-                    b.Property<Guid>("AttractionsDbMAttractionId")
+                    b.Property<Guid>("AttractionDbMAttractionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoriesDbMCategoryId")
+                    b.Property<Guid>("CategoryDbMCategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("AttractionsDbMAttractionId", "CategoriesDbMCategoryId");
+                    b.HasKey("AttractionDbMAttractionId", "CategoryDbMCategoryId");
 
-                    b.HasIndex("CategoriesDbMCategoryId");
+                    b.HasIndex("CategoryDbMCategoryId");
 
                     b.ToTable("AttractionDbMCategoryDbM", "suprusr");
                 });
@@ -228,13 +228,13 @@ namespace DbContext.Migrations.SqlServerDbContext
                 {
                     b.HasOne("DbModels.AttractionDbM", null)
                         .WithMany()
-                        .HasForeignKey("AttractionsDbMAttractionId")
+                        .HasForeignKey("AttractionDbMAttractionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DbModels.CategoryDbM", null)
                         .WithMany()
-                        .HasForeignKey("CategoriesDbMCategoryId")
+                        .HasForeignKey("CategoryDbMCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -71,6 +71,26 @@ public class MainDbContext : Microsoft.EntityFrameworkCore.DbContext
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
+        //Delete cascade on junction table between attraction & category
+        modelBuilder.Entity<AttractionDbM>()
+            .HasMany(a => a.CategoriesDbM)       // Categories in AttractionDbM
+            .WithMany(c => c.AttractionsDbM)     // Attractions in CategoryDbM
+            .UsingEntity<Dictionary<string, object>>
+            (
+                "AttractionDbMCategoryDbM",
+        
+                // (Category -> Join Table)
+                j => j.HasOne<CategoryDbM>()
+                    .WithMany()
+                    .HasForeignKey("CategoryDbMCategoryId")
+                    .OnDelete(DeleteBehavior.Cascade),
+                
+                // (Attraction -> Join Table)
+                j => j.HasOne<AttractionDbM>()
+                    .WithMany()
+                    .HasForeignKey("AttractionDbMAttractionId")
+                    .OnDelete(DeleteBehavior.Cascade)
+            );
         #endregion
         base.OnModelCreating(modelBuilder);
     }

@@ -27,24 +27,16 @@ public class CityDbRepos
 
     public async Task<ResponseItemDto<ICity>> ReadCityAsync(Guid id, bool flat)
     {
-        ICity item;
-        if(flat)
-        {
-            var query = _dbContext.Cities.AsNoTracking()
-               .Where(i => i.CityId == id);
+        var query = _dbContext.Cities.AsNoTracking()
+            .Where(c => c.CityId == id);
 
-            item = await query.FirstOrDefaultAsync<ICity>();
-
-        }
-        else
-        {
-            var query = _dbContext.Cities.AsNoTracking()
+        if (!flat)
+            query = query
                 .Include(i => i.CountryDbM)
-                .Include(i => i.AttractionsDbM)
-                .Where(i => i.CityId == id);
+                .Include(c => c.AttractionsDbM.Where(a => a.ReviewsDbM.Any())) // Include only if attraction has 1+ reviews (is recommended)
+                .ThenInclude(a => a.CategoriesDbM);
 
-            item = await query.FirstOrDefaultAsync<ICity>();
-        }
+        var item = await query.FirstOrDefaultAsync<ICity>();
 
         if (item is null) throw new ArgumentException($"City {id} does not exist.");
         

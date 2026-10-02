@@ -116,22 +116,22 @@ namespace DbContext.Migrations.SqlServerDbContext
                 schema: "suprusr",
                 columns: table => new
                 {
-                    AttractionsDbMAttractionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoriesDbMCategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    AttractionDbMAttractionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoryDbMCategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AttractionDbMCategoryDbM", x => new { x.AttractionsDbMAttractionId, x.CategoriesDbMCategoryId });
+                    table.PrimaryKey("PK_AttractionDbMCategoryDbM", x => new { x.AttractionDbMAttractionId, x.CategoryDbMCategoryId });
                     table.ForeignKey(
-                        name: "FK_AttractionDbMCategoryDbM_Attractions_AttractionsDbMAttractionId",
-                        column: x => x.AttractionsDbMAttractionId,
+                        name: "FK_AttractionDbMCategoryDbM_Attractions_AttractionDbMAttractionId",
+                        column: x => x.AttractionDbMAttractionId,
                         principalSchema: "suprusr",
                         principalTable: "Attractions",
                         principalColumn: "AttractionId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AttractionDbMCategoryDbM_Categories_CategoriesDbMCategoryId",
-                        column: x => x.CategoriesDbMCategoryId,
+                        name: "FK_AttractionDbMCategoryDbM_Categories_CategoryDbMCategoryId",
+                        column: x => x.CategoryDbMCategoryId,
                         principalSchema: "suprusr",
                         principalTable: "Categories",
                         principalColumn: "CategoryId",
@@ -171,10 +171,10 @@ namespace DbContext.Migrations.SqlServerDbContext
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AttractionDbMCategoryDbM_CategoriesDbMCategoryId",
+                name: "IX_AttractionDbMCategoryDbM_CategoryDbMCategoryId",
                 schema: "suprusr",
                 table: "AttractionDbMCategoryDbM",
-                column: "CategoriesDbMCategoryId");
+                column: "CategoryDbMCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Attractions_CityId_Title",
